@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,6 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {useDispatch, useSelector} from "react-redux";
+import {signIn} from "./redux/auth-reducer";
 
 function Copyright(props) {
     return (
@@ -26,13 +28,33 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-    const handleSubmit = (event) => {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        try {
+            await dispatch(signIn(emailOrUsername, password));
+            const data = new FormData(event.currentTarget);
+            console.log({
+                email: data.get('email'),
+                password: data.get('password'),
+            });
+        } catch (error) {
+            console.error('Error during sign in:', error);
+        }
+    };
+
+    const dispatch = useDispatch();
+    const signInState = useSelector((state) => state.auth);
+
+    const [emailOrUsername, setEmailOrUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleChangeEmailOrUsername = (event) => {
+        setEmailOrUsername(event.target.value);
+    };
+
+    const handleChangePassword = (event) => {
+        setPassword(event.target.value);
     };
 
     return (
@@ -63,6 +85,8 @@ export default function SignIn() {
                             name="email"
                             autoComplete="username email"
                             autoFocus
+                            value={emailOrUsername}
+                            onChange={handleChangeEmailOrUsername}
                         />
                         <TextField
                             margin="normal"
@@ -73,6 +97,8 @@ export default function SignIn() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            value={password}
+                            onChange={handleChangePassword}
                         />
                         <Button
                             type="submit"

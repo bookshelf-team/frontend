@@ -13,6 +13,8 @@ import {
     Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import {useDispatch, useSelector} from "react-redux";
+import {signUp} from "./redux/auth-reducer";
 
 function Copyright(props) {
     return (
@@ -27,6 +29,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+    const dispatch = useDispatch();
+    const signUpState = useSelector((state) => state.auth);
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -35,19 +39,22 @@ export default function SignUp() {
     });
     const [passwordsMatch, setPasswordsMatch] = useState(true);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-
         if (formData.password !== formData.confirmPassword) {
             setPasswordsMatch(false);
             return;
         }
-
-        console.log({
-            username: formData.username,
-            email: formData.email,
-            password: formData.password,
-        });
+        try {
+            await dispatch(signUp(formData.username, formData.email, [], formData.password));
+            console.log({
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+            });
+        } catch (error) {
+            console.error('Error during sign up:', error);
+        }
     };
 
     const handleInputChange = (event) => {
@@ -154,6 +161,7 @@ export default function SignUp() {
                                 </Link>
                             </Grid>
                         </Grid>
+                        {signUpState.error && <p>{signUpState.error}</p>}
                     </Box>
                 </Box>
                 <Copyright sx={{mt: 5}}/>
