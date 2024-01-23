@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {signIn} from "./redux/auth-reducer";
 
 function Copyright(props) {
@@ -44,7 +44,7 @@ export default function SignIn() {
     };
 
     const dispatch = useDispatch();
-    const signInState = useSelector((state) => state.auth);
+    //const signInState = useSelector((state) => state.auth);
 
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
