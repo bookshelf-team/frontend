@@ -5,6 +5,7 @@ import SignIn from './SignIn';
 import UserProfile from './pages/userProfile';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from "./Main";
+import ProfileEditDialog from "./components/ProfileEditDialog";
 
 
 function App() {
@@ -14,8 +15,8 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/pages/userprofile" element={<UserProfile />} />
-                <Route path="/" element={<SignIn />} index={true} />
                 <Route path="/" element={<Main/>} index={true} />
+                <Route path="/editprofile" element={<ProfileEditDialog />} />
             </Routes>
         </Router>
     );

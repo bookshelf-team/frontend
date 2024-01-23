@@ -32,10 +32,13 @@ export default function ProfileEditDialog() {
     };
 
     const handleSubmit = async () => {
+
     };
 
     return (
         <div>
+            <Button onClick={() => setOpen(true)}>Редагувати профіль</Button>
+
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Редагування профілю</DialogTitle>
                 <DialogContent>
