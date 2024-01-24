@@ -5,16 +5,46 @@ const instance = axios.create({
 });
 
 export const authAPI = {
-    signIn(emailOrUsername, password) {
-        return instance.post(`auth/signin`, {emailOrUsername, password});
+    async signIn(emailOrUsername, password) {
+        try {
+            const response = await instance.post(`auth/signin`, {emailOrUsername, password});
+            if (response.status === 200) {
+                sessionStorage.setItem('jwtToken', response.data.accessToken);
+            }
+            return response;
+        } catch (error) {
+            return error.response;
+        }
     },
-    signUp(username, email, role, items, password) {
-        return instance.post(`auth/signup`, {username, email, role, items, password});
+    async signUp(username, email, role, password) {
+        try {
+            const response = await instance.post(`auth/signup`, {username, email, role, password});
+            //додати збереження
+            return response;
+        } catch (error) {
+            return error.response;
+        }
     },
-    signOut() {
-        return instance.post(`auth/signout`);
+    async signOut() {
+        try {
+            const response = await instance.post(`auth/signout`);
+            if (response.status === 200) {
+                sessionStorage.removeItem('jwtToken');
+            }
+            return response;
+        } catch (error) {
+            return error.response;
+        }
     },
-    refreshTokenRequest(refreshToken) {
-        return instance.post(`auth/refresh`, {refreshToken});
+    async refreshTokenRequest(refreshToken) {
+        try {
+            const response = await instance.post(`auth/refresh`, {refreshToken});
+            if (response.status === 200) {
+                sessionStorage.setItem('jwtToken', response.data.accessToken);
+            }
+            return response;
+        } catch (error) {
+            return error.response;
+        }
     }
 }
