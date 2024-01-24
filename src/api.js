@@ -47,3 +47,35 @@ export const authAPI = {
         }
     }
 }
+
+export const bookAPI = {
+    async getAllBooks() {
+        try {
+            return await instance.get(`book/all`);
+        } catch (error) {
+            return error.response;
+        }
+    },
+    async getBookById(id) {
+        try {
+            return await instance.get(`book/${id}`);
+        } catch (error) {
+            return error.response;
+        }
+    },
+
+    async getBooksByTitle(title) {
+        try {
+            return await instance.get(`book/search/title`, { params: { title } });
+        } catch (error) {
+            return error.response;
+        }
+    },
+    async getBooksByAuthor(author) {
+        try {
+            return await instance.get(`book/search/author`, { params: { author } });
+        } catch (error) {
+            return error.response;
+        }
+    }
+};
