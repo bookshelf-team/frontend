@@ -1,9 +1,12 @@
 import authReducer from "./auth-reducer";
+import bookSearchReducer from "./bookSearchReducer";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {thunk} from "redux-thunk";
 
 const reducers = combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    bookSearch: bookSearchReducer,
+
 });
 
 const store = createStore(reducers, applyMiddleware(thunk));

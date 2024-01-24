@@ -9,6 +9,8 @@ import {useNavigate} from 'react-router-dom';
 import LeftPanelDrawer from './MainMenuDrawer';
 import {useDispatch, useSelector} from 'react-redux';
 import {signIn, signOut} from '../redux/auth-reducer';
+import { searchBooksByDBooksAPI } from '../redux/bookSearchService';
+import { setSearchResults } from '../redux/bookSearchActions';
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -72,6 +74,21 @@ export default function SearchAppBar() {
         navigate('/signin');
     };
 
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handleSearch = async () => {
+        if (searchQuery) {
+            const dBooksResults = await searchBooksByDBooksAPI(searchQuery);
+            dispatch(setSearchResults(dBooksResults));
+            console.log(dBooksResults);
+            navigate('/searchresults');
+        }
+    };
+
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static" sx={{backgroundColor: '#212121'}}>
@@ -101,9 +118,20 @@ export default function SearchAppBar() {
                         </SearchIconWrapper>
                         <StyledInputBase
                             placeholder="Search…"
-                            inputProps={{'aria-label': 'search'}}
+                            inputProps={{ 'aria-label': 'search' }}
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    event.preventDefault();
+                                    handleSearch();
+                                    console.log('жмяк');
+                                }
+                            }}
                         />
                     </Search>
+
+
 
                     {isAuthenticated ? (
                         <IconButton

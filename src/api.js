@@ -18,9 +18,8 @@ export const authAPI = {
     },
     async signUp(username, email, role, password) {
         try {
-            const response = await instance.post(`auth/signup`, {username, email, role, password});
             //додати збереження
-            return response;
+            return await instance.post(`auth/signup`, {username, email, role, password});
         } catch (error) {
             return error.response;
         }

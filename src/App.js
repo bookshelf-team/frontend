@@ -7,6 +7,7 @@ import SignIn from './SignIn';
 import UserProfile from './pages/userProfile';
 import Main from "./Main";
 import ProfileEditDialog from "./components/ProfileEditDialog";
+import SearchResultsPage from "./components/SearchResultsPage";
 
 function App() {
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/" element={<Main />} index={true}/>
                 <Route path="/main" element={<Main />}/>
                 <Route path="/editprofile" element={<ProfileEditDialog />} />
+                <Route path="/searchresults" element={<SearchResultsPage />} />
             </Routes>
         </Router>
     );
