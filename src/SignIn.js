@@ -33,10 +33,9 @@ export default function SignIn() {
         event.preventDefault();
         try {
             await dispatch(signIn(emailOrUsername, password));
-            const data = new FormData(event.currentTarget);
             console.log({
-                email: data.get('email'),
-                password: data.get('password'),
+                email: emailOrUsername,
+                password: password
             });
         } catch (error) {
             console.error('Error during sign in:', error);

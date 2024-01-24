@@ -6,6 +6,7 @@ import UserProfile from './pages/userProfile';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from "./Main";
 import ProfileEditDialog from "./components/ProfileEditDialog";
+import BookPage from "./pages/bookPage";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/pages/userprofile" element={<UserProfile />} />
                 <Route path="/" element={<Main/>} index={true} />
                 <Route path="/editprofile" element={<ProfileEditDialog />} />
+                <Route path="/book" element={<BookPage/>}/>
             </Routes>
         </Router>
     );

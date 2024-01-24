@@ -8,8 +8,8 @@ export const authAPI = {
     signIn(emailOrUsername, password) {
         return instance.post(`auth/signin`, {emailOrUsername, password});
     },
-    signUp(username, email, role, items, password) {
-        return instance.post(`auth/signup`, {username, email, role, items, password});
+    signUp(username, email, role, password) {
+        return instance.post(`auth/signup`, {username, email, role, password});
     },
     signOut() {
         return instance.post(`auth/signout`);
