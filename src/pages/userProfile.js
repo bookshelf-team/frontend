@@ -9,6 +9,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
+import ProfileEditDialog from '../components/ProfileEditDialog';
 
 
 export default function UserProfile() {
@@ -58,9 +59,9 @@ function a11yProps(index) {
                     height:'100%',
                     backgroundColor:'#23232B', 
                     }}>
-            <header>
+            <header className='profile-header'>
                 <Button variant="text" sx={{color:"white", }} >Новий допис</Button>
-                <Button variant="text" sx={{color:"white", marginRight:"40px"}}>Редагувати</Button>
+                <ProfileEditDialog></ProfileEditDialog>
             </header>            
             <Box sx={{  width: '100%', 
                         height:'100%',
