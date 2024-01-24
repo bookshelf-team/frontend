@@ -121,7 +121,7 @@ export default function SearchAppBar() {
                             inputProps={{ 'aria-label': 'search' }}
                             value={searchQuery}
                             onChange={handleSearchChange}
-                            onKeyPress={(event) => {
+                            onKeyDown={(event) => {
                                 if (event.key === 'Enter') {
                                     event.preventDefault();
                                     handleSearch();
@@ -130,8 +130,6 @@ export default function SearchAppBar() {
                             }}
                         />
                     </Search>
-
-
 
                     {isAuthenticated ? (
                         <IconButton
