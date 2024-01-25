@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useDispatch} from "react-redux";
 import {signIn} from "./redux/auth-reducer";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
     return (
@@ -29,15 +30,17 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
 
+    const navigate = useNavigate();
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             await dispatch(signIn(emailOrUsername, password));
-            const data = new FormData(event.currentTarget);
             console.log({
-                email: data.get('email'),
-                password: data.get('password'),
+                email: emailOrUsername,
+                password: password
             });
+            navigate('/');
         } catch (error) {
             console.error('Error during sign in:', error);
         }

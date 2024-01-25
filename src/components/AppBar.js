@@ -1,13 +1,18 @@
-import React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import { AppBar, Box, Toolbar, IconButton, Typography, InputBase } from '@mui/material';
+import React, {useState} from 'react';
+import {styled, alpha} from '@mui/material/styles';
+import {AppBar, Box, Toolbar, IconButton, Typography, InputBase} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-import { useNavigate } from 'react-router-dom';
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import {useNavigate} from 'react-router-dom';
 import LeftPanelDrawer from './MainMenuDrawer';
+import {useDispatch, useSelector} from 'react-redux';
+import {signIn, signOut} from '../redux/auth-reducer';
+import { searchBooksByDBooksAPI } from '../redux/bookSearchService';
+import { setSearchResults } from '../redux/bookSearchActions';
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -22,7 +27,7 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -32,7 +37,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({theme}) => ({
     color: 'inherit',
     width: '100%',
     '& .MuiInputBase-input': {
@@ -50,61 +55,109 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar() {
     let navigate = useNavigate();
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const isAuthenticated = useSelector((state) => state.auth.isAuth);
+    const dispatch = useDispatch();
+
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const handleDrawerOpen = () => {
         setDrawerOpen(true);
     };
 
     const handleExitClick = () => {
+        dispatch(signOut());
         navigate('/signin');
-    }
+    };
+
+    const handleLoginClick = () => {
+        dispatch(signIn());
+        navigate('/signin');
+    };
+
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handleSearch = async () => {
+        if (searchQuery) {
+            const dBooksResults = await searchBooksByDBooksAPI(searchQuery);
+            dispatch(setSearchResults(dBooksResults));
+            console.log(dBooksResults);
+            navigate('/searchresults');
+        }
+    };
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: '#212121' }}>
+        <Box sx={{flexGrow: 1}}>
+            <AppBar position="static" sx={{backgroundColor: '#212121'}}>
                 <Toolbar>
                     <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="open drawer"
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2}}
                         onClick={handleDrawerOpen}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                     <Typography
                         variant="h6"
                         noWrap
                         component="div"
-                        sx={{ mr: 1.3, color: 'white' }}
+                        sx={{mr: 1.3, color: 'white'}}
                     >
                         BookShelf
                     </Typography>
 
                     <Search>
                         <SearchIconWrapper>
-                            <SearchIcon />
+                            <SearchIcon/>
                         </SearchIconWrapper>
                         <StyledInputBase
                             placeholder="Search…"
                             inputProps={{ 'aria-label': 'search' }}
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                    event.preventDefault();
+                                    handleSearch();
+                                    console.log('жмяк');
+                                }
+                            }}
                         />
                     </Search>
-                    <IconButton
-                        size="large"
-                        edge="end"
-                        color="inherit"
-                        aria-label="exit"
-                        sx={{ marginLeft: 'auto' }}
-                        onClick={handleExitClick}
-                    >
-                        <ExitToAppRoundedIcon />
-                    </IconButton>
+
+                    {isAuthenticated ? (
+                        <IconButton
+                            size="large"
+                            edge="end"
+                            color="inherit"
+                            aria-label="exit"
+                            sx={{marginLeft: 'auto'}}
+                            onClick={handleExitClick}
+                            title={"Вийти з профілю"}
+                        >
+                            <ExitToAppRoundedIcon/>
+                        </IconButton>
+                    ) : (
+                        <IconButton
+                            size="large"
+                            color="inherit"
+                            aria-label="login"
+                            sx={{marginLeft: 'auto'}}
+                            onClick={handleLoginClick}
+                            title={"Увійти в профіль"}
+                        >
+                            <LoginRoundedIcon/>
+                        </IconButton>
+                    )}
                 </Toolbar>
             </AppBar>
-            <LeftPanelDrawer isOpen={drawerOpen} toggleDrawer={setDrawerOpen} />
+            <LeftPanelDrawer isOpen={drawerOpen} toggleDrawer={setDrawerOpen}/>
         </Box>
     );
 }
