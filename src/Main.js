@@ -7,7 +7,7 @@ import AppBar from './components/AppBar';
 import BookRecommendations from './components/BookRecomendation';
 import LastPostsUsers from './components/PostCard';
 import List from '@mui/material/List';
-import { Divider, ListItem } from '@mui/material';
+import {ListItem} from '@mui/material';
 
 function Copyright() {
     return (

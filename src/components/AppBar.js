@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {styled, alpha} from '@mui/material/styles';
-import {AppBar, Box, Toolbar, IconButton, Typography, InputBase} from '@mui/material';
+import {AppBar, Box, Toolbar, IconButton, Typography, InputBase, Button} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
@@ -11,6 +11,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {signIn, signOut} from '../redux/auth-reducer';
 import { searchBooksByDBooksAPI } from '../redux/bookSearchService';
 import { setSearchResults } from '../redux/bookSearchActions';
+import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
+import BookGenresAppBar from "./BookGenresAppBar";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -59,6 +61,12 @@ export default function SearchAppBar() {
     const dispatch = useDispatch();
 
     const [drawerOpen, setDrawerOpen] = useState(false);
+
+    const [topDrawerOpen, setTopDrawerOpen] = useState(false);
+
+    const openBookCatalogue = () => {
+        setTopDrawerOpen(true);
+    };
 
     const handleDrawerOpen = () => {
         setDrawerOpen(true);
@@ -112,6 +120,16 @@ export default function SearchAppBar() {
                         BookShelf
                     </Typography>
 
+                    <Button
+                        variant="h6"
+                        startIcon={<LibraryBooksRoundedIcon />}
+                        color="inherit"
+                        onClick={openBookCatalogue}
+                        sx={{ textTransform: 'none', size: 40 }}
+                    >
+                        Book Catalogue
+                    </Button>
+
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon/>
@@ -158,6 +176,7 @@ export default function SearchAppBar() {
                 </Toolbar>
             </AppBar>
             <LeftPanelDrawer isOpen={drawerOpen} toggleDrawer={setDrawerOpen}/>
+            <BookGenresAppBar isOpen={topDrawerOpen} toggleDrawer={setTopDrawerOpen} />
         </Box>
     );
 }
