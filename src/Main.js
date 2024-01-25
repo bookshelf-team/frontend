@@ -7,16 +7,17 @@ import AppBar from './components/AppBar';
 import BookRecommendations from './components/BookRecomendation';
 import LastPostsUsers from './components/PostCard';
 import List from '@mui/material/List';
+import { Divider, ListItem } from '@mui/material';
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="text.secondary" align="center">
+        <Typography variant="body2" color="white" marginTop="30px" align="center">
             {'Copyright © '}
                Bookshelf
             {' '}
             {new Date().getFullYear()}
             {'.'}
-        </Typography>
+        </Typography> 
     );
 }
 
@@ -27,11 +28,11 @@ export default function Main() {
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline/>
             <AppBar></AppBar>
-            <main>
+            <main className='mainBg'>
                 {/* Hero unit */}
                 <Box
                     sx={{
-                        bgcolor: 'background.paper',
+                        bgcolor: '#23232B',
                         pt: 8,
                         pb: 6,
                     }}
@@ -41,21 +42,22 @@ export default function Main() {
                 </Box>
             </main>
             {/* Footer */}
-            <Box sx={{bgcolor: 'background.paper', p: 6}} component="footer">
-                <Typography variant="h6" align="center" gutterBottom>
-                    Footer
-                </Typography>
+            <Box sx={{bgcolor: '#1D1E23', p: 6}} component="footer" >
                 <Typography
                     variant="subtitle1"
                     align="center"
                     color="text.secondary"
                     component="p"
+                    display="flex"
+                    width="100%"
+                    alignItems="center"
+                    justifyContent="center"
                 >
-                <List>
-                    Про нас
-                    Новини
-                    Інформація для читачів
-                    Технічна підтримка
+                <List  sx={{display:"flex", alignSelf:"center", alignItems:"center", justifyContent:"center", width:"50%"}}>
+                    <ListItem style={{color:"white"}}>Про нас</ListItem>
+                    <ListItem style={{color:"white"}}>Новини</ListItem>
+                    <ListItem style={{color:"white"}}>Для читачів</ListItem>
+                    <ListItem style={{color:"white"}}>Технічна підтримка</ListItem>
                 </List>
                 </Typography>
                 <Copyright/>

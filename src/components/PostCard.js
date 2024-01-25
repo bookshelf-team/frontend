@@ -72,10 +72,10 @@ export default function PostCards() {
 
     return (
         <Box sx={{flexGrow: 1, overflow: 'hidden', px: 1, py: 1, marginLeft: 2, marginTop:4}}>
-                <Typography variant="h5" gutterBottom component="div">
+                <Typography variant="h5" color={"white"} gutterBottom component="div">
                     Останні дописи користувачів
                 </Typography>
-                <Typography variant="subtitle1" gutterBottom component="div" sx={{marginBottom: 2}}>
+                <Typography variant="subtitle1" color={"white"} gutterBottom component="div" sx={{marginBottom: 2}}>
                     Дізнайтеся більше про прочитані книги
                 </Typography>
                 <Grid container spacing={2}>

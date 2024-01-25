@@ -15,10 +15,10 @@ const books = [
 export default function BookRecommendations() {
     return (
         <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 1, py: 1, marginLeft: 2 }}>
-            <Typography variant="h5" gutterBottom component="div">
+            <Typography variant="h5" gutterBottom component="div" color={"white"}>
                 Вам може сподобатися
             </Typography>
-            <Typography variant="subtitle1" gutterBottom component="div" sx={{marginBottom: 2}}>
+            <Typography variant="subtitle1" gutterBottom component="div" color={"white"} sx={{marginBottom: 2}}>
                 Рекомендовані підбірки книг
             </Typography>
             <Grid container spacing={0}>
@@ -30,10 +30,10 @@ export default function BookRecommendations() {
                             image={book.cover}
                             alt={`Обкладинка книги ${book.title}`}
                         />
-                        <Typography variant="body1" component="div" sx={{ textAlign: 'center', marginTop: 1}}>
+                        <Typography variant="body1" component="div" color={"white"} sx={{ textAlign: 'center', marginTop: 1}}>
                             {book.title}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+                        <Typography variant="body2"  color={"white"} sx={{ textAlign: 'center' }}>
                             {book.author}
                         </Typography>
                     </Grid>
