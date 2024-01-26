@@ -7,6 +7,19 @@ import AppBar from './components/AppBar';
 import BookRecommendations from './components/BookRecomendation';
 import LastPostsUsers from './components/PostCard';
 import List from '@mui/material/List';
+import {ListItem} from '@mui/material';
+
+function Copyright() {
+    return (
+        <Typography variant="body2" color="white" marginTop="30px" align="center">
+            {'Copyright © '}
+               Bookshelf
+            {' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography> 
+    );
+}
 import { Divider, ListItem } from '@mui/material';
 import Footer from './components/Footer';
 
