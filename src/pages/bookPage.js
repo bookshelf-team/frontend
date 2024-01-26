@@ -1,8 +1,12 @@
 import React from "react";
 import AppBar from "../components/AppBar";
-import "../pages/bookStyles.css";
-import {CardMedia, Grid, Typography} from "@mui/material";
+import {Box, CardMedia, Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
+import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
+import ClassIcon from '@mui/icons-material/Class';
+import Footer from "../components/Footer";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Link from "@mui/material/Link";
 
 const book = {
     cover: 'https://static.yakaboo.ua/media/catalog/product/f/b/fbca87146bb849107d32a0ed9172f5d8.jpg',
@@ -13,75 +17,82 @@ const books = [book, book, book];
 
 export default function BookPage() {
     return (
-        <div>
+        <Box>
             <AppBar/>
-            <div className="content">
-                <div className="top">
-                    <div className="image">
+            <Box sx={{display:"flex", flexDirection:"column", alignItems:"center", width:"100%"}}>
+                <Box sx={{display:"flex", width:"90%", marginTop:"50px", alignItems:"flex-end"}} >
+                    <Box className="image">
                         <CardMedia
                             component="img"
-                            sx={{width: 150, height: 220, display: 'block'}}
+                            sx={{width: 150, height: 220, display: 'block', marginRight:"30px"}}
                             image={book.cover}
                             alt={`Обкладинка книги ${book.title}`}
                         />
-                    </div>
-                    <div className="book-data">
+                    </Box>
+                    <Box sx={{color:"white"}}>
+                    <Breadcrumbs aria-label="breadcrumb" marginBottom="75px">
+                        <Link underline="hover" color="white" href="/">
+                            MUI
+                        </Link>
+                        <Link underline="hover" color="white" href="/material-ui/getting-started/installation/" >
+                            Core
+                        </Link>
+                        <Typography color="white">Breadcrumbs</Typography>
+                    </Breadcrumbs>
                         <Typography variant="body1" component="div" sx={{ marginTop: 1}}>
                             {book.title}
                         </Typography>
-                        <Typography variant="body2" component="div" sx={{ marginTop: 1}}>
-                            {book.genre}
-                        </Typography>
-                        <Typography variant="body3" color="text.secondary">
+                        <Typography variant="body2">
                             {book.author}
                         </Typography>
-                        <div className="reading">
-                            <Button>Читаю
-                                <img src="/" alt="icon"/>
-                            </Button>
-                        </div>
-                        <div className="will-read">
-                            <Button>Додати на полицю
-                                <img src="/" alt="icon"/>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-                <div className="bottom">
-                    <div className="description">
-                        <h2>Опис</h2>
-                        <div className="description-text">Lorem Ipsum is simply dummy text of the printing
+                        <Typography variant="body2" component="div" sx={{opacity:"0.4"}}>
+                            {book.genre}
+                        </Typography>
+                        <Button variant="outlined" sx={{ marginTop:"15px", marginRight:"15px", color:"white"}}>Читаю
+                            <ClassIcon sx={{marginLeft:"10px"}}/>
+                        </Button>
+                        <Button variant="outlined" sx={{marginTop:"15px", color:"white"}}>Додати на полицю
+                            <CollectionsBookmarkIcon sx={{marginLeft:"10px"}}/> 
+                        </Button>   
+                    </Box>
+                </Box>
+                <Box sx={{display:"flex", flexDirection:"column", width:"90%"}} >
+                    <Box color="white">
+                        <Typography variant="h5" marginTop="50px">Опис</Typography>
+                        <Typography width="70%" marginTop="20px" >Lorem Ipsum is simply dummy text of the printing
                             and typesetting industry. Lorem Ipsum has been the industry's standard dummy
                             text ever since the 1500s, when an unknown printer took a galley of type and
                             scrambled it to make a type specimen book. It has survived not only five centuries,
                             but also the leap into electronic typesetting, remaining essentially unchanged.
                             It was popularised in the 1960s with the release of Letraset sheets containing
                             Lorem Ipsum passages, and more recently with desktop publishing software like
-                            Aldus PageMaker including versions of Lorem Ipsum.</div>
-                    </div>
-                    <div className="recommended">
-                        <h2>Рекомендовані до читання</h2>
-                        <Grid container spacing={0}>
+                            Aldus PageMaker including versions of Lorem Ipsum.</Typography>
+                    </Box>
+                    <Box color="white">
+                        <Typography variant="h5" marginTop="50px">Рекомендовані до читання</Typography>
+                        <Grid marginTop="20px" container spacing={0}>
                             {books.map((book, index) => (
                                 <Grid item xs={4} sm={4} md={2} lg={1.5} key={index} sx={{marginRight: 15}}>
                                     <CardMedia
                                         component="img"
-                                        sx={{ width: 150, height: 220, m: 'auto', display: 'block' }}
+                                        sx={{ width: 150, height: 220,  display: 'block' }}
                                         image={book.cover}
                                         alt={`Обкладинка книги ${book.title}`}
                                     />
-                                    <Typography variant="body1" color="text.secondary">
-                                        {book.author}
-                                    </Typography>
-                                    <Typography variant="body2" component="div" sx={{ marginTop: 1}}>
+                                     <Typography variant="body1" component="div" sx={{ marginTop: 1}}>
                                         {book.title}
                                     </Typography>
+                                    <Typography variant="body2" sx={{opacity:"0.4"}}>
+                                        {book.author}
+                                    </Typography>
+                                   
                                 </Grid>
                             ))}
                         </Grid>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </Box>
+                </Box>
+                <Footer/>
+            </Box>
+        </Box>
     );
 }
