@@ -78,4 +78,12 @@ export const bookAPI = {
             return error.response;
         }
     }
+
+    async getBooksByGenre(genre) {
+        try {
+            return await instance.get(`book/search/genre`, { params: { genre } });
+        } catch (error) {
+            return error.response;
+        }
+    }
 };
