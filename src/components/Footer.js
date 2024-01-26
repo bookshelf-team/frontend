@@ -16,7 +16,7 @@ function Copyright() {
 
 export default function Footer(){
     return(
-        <Box sx={{bgcolor: '#1D1E23', paddingTop:6,paddingBottom:6, width:"100%", marginTop:"50px"}} component="footer" >
+        <Box sx={{bgcolor: '#1D1E23', paddingTop:6,paddingBottom:6, width:"100%"}} component="footer" >
                 <Typography
                     variant="subtitle1"
                     align="center"
