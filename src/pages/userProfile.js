@@ -10,6 +10,8 @@ import Box from '@mui/material/Box';
 import { Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
 import ProfileEditDialog from '../components/ProfileEditDialog';
+import Footer from '../components/Footer';
+import BookComponent from '../components/BookComponent';
 
 
 export default function UserProfile() {
@@ -112,7 +114,8 @@ function a11yProps(index) {
                 </CustomTabPanel>
               </Box>
             </Box>
-
-        </Box>
+            <BookComponent/>
+          <Footer />
+      </Box>
     );
 }
