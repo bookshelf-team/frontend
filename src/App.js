@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { signInSuccess } from './redux/auth-reducer';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import UserProfile from './pages/userProfile';
@@ -11,13 +9,6 @@ import SearchResultsPage from "./components/SearchResultsPage";
 import BookPage from "./pages/bookPage";
 
 function App() {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const jwtToken = sessionStorage.getItem('jwtToken');
-        if (jwtToken) {
-            dispatch(signInSuccess({ accessToken: jwtToken }));
-        }
-    }, [dispatch]);
 
     return (
         <Router>
