@@ -1,5 +1,5 @@
 import authReducer from "./auth-reducer";
-import bookSearchReducer from "./bookSearchReducer";
+import bookSearchReducer from "./bookSearch/bookSearchReducer";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {thunk} from "redux-thunk";
 
