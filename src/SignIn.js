@@ -29,28 +29,10 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-
-    const navigate = useNavigate();
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            await dispatch(signIn(emailOrUsername, password));
-            console.log({
-                email: emailOrUsername,
-                password: password
-            });
-            navigate('/');
-        } catch (error) {
-            console.error('Error during sign in:', error);
-        }
-    };
-
-    const dispatch = useDispatch();
-    //const signInState = useSelector((state) => state.auth);
-
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleChangeEmailOrUsername = (event) => {
         setEmailOrUsername(event.target.value);
@@ -58,6 +40,16 @@ export default function SignIn() {
 
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            await dispatch(signIn(emailOrUsername, password));
+            navigate('/');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (

@@ -4,6 +4,48 @@ const instance = axios.create({
   baseURL: `http://localhost:8080/`,
 });
 
+instance.interceptors.request.use(
+    (config) => {
+      const token = sessionStorage.getItem("jwtToken");
+      if (token) {
+        config.headers["Authorization"] = 'Bearer ' + token;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+);
+
+instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response.status === 401 && originalRequest.url === `auth/refresh`) {
+        sessionStorage.removeItem("jwtToken");
+        return Promise.reject(error);
+      }
+
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        const refreshToken = sessionStorage.getItem("refreshToken");
+        return instance
+            .post(`auth/refresh`, { refreshToken })
+            .then((res) => {
+              if (res.status === 200) {
+                sessionStorage.setItem("jwtToken", res.data.accessToken);
+                axios.defaults.headers.common["Authorization"] = 'Bearer ' + res.data.accessToken;
+                originalRequest.headers["Authorization"] = 'Bearer ' + res.data.accessToken;
+                return axios(originalRequest);
+              }
+            });
+      }
+      return Promise.reject(error);
+    }
+);
+
 export const authAPI = {
   async signIn(emailOrUsername, password) {
     try {
@@ -13,6 +55,9 @@ export const authAPI = {
       });
       if (response.status === 200) {
         sessionStorage.setItem("jwtToken", response.data.accessToken);
+        if (response.data.refreshToken) {
+          sessionStorage.setItem("refreshToken", response.data.refreshToken);
+        }
       }
       return response;
     } catch (error) {
@@ -21,7 +66,6 @@ export const authAPI = {
   },
   async signUp(username, email, role, password) {
     try {
-      //додати збереження
       return await instance.post(`auth/signup`, {
         username,
         email,
@@ -37,6 +81,7 @@ export const authAPI = {
       const response = await instance.post(`auth/signout`);
       if (response.status === 200) {
         sessionStorage.removeItem("jwtToken");
+        sessionStorage.removeItem("refreshToken");
       }
       return response;
     } catch (error) {

@@ -22,6 +22,8 @@ let initialState = {
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case SIGN_IN_SUCCESS:
+            localStorage.setItem('isAuth', 'true');
+            console.log('SIGN_IN_SUCCESS', action.payload);
             return {
                 ...state,
                 isAuth: true,
@@ -47,6 +49,7 @@ const authReducer = (state = initialState, action) => {
         case SIGN_OUT_SUCCESS:
             return {
                 ...state,
+                isAuth: false,
                 loading: false
             };
         case SIGN_OUT_FAILURE:
@@ -111,17 +114,20 @@ export const refreshTokenFailure = (error) => ({
 })
 
 export const signIn = (emailOrUsername, password) => async (dispatch) => {
-    const response = await authAPI.signIn(emailOrUsername, password);
-    if (response.status === 200) {
-        dispatch(signInSuccess(response.data));
-    } else if (response.status === 403) {
-        dispatch(signInFailure("Access Denied: User is not exist"));
-    } else {
-        dispatch(signInFailure("Unknown error during sign in"));
-    }
-    console.log(response.data);
-};
+    try {
+        const jwtResponse = await authAPI.signIn(emailOrUsername, password);
+        localStorage.setItem('accessToken', jwtResponse.accessToken);
+        localStorage.setItem('refreshToken', jwtResponse.refreshToken);
+        localStorage.setItem('tokenType', jwtResponse.tokenType);
 
+        dispatch(signInSuccess(jwtResponse));
+    } catch (error) {
+        const errorMessage = error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        dispatch(signInFailure(errorMessage));
+    }
+};
 export const signUp = (userName, email, role, password) => async (dispatch) => {
     const response = await authAPI.signUp(userName, email, role, password);
     if (response.status === 200) {
