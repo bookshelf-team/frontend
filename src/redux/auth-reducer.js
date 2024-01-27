@@ -77,6 +77,7 @@ const authReducer = (state = initialState, action) => {
 
 export const signInSuccess = (jwtResponse) => ({
     type: SIGN_IN_SUCCESS,
+    isAuth: true,
     payload: jwtResponse,
 });
 
@@ -95,7 +96,9 @@ export const signUpFailure = (error) => ({
 });
 
 export const signOutSuccess = () => ({
-    type: SIGN_OUT_SUCCESS
+    type: SIGN_OUT_SUCCESS,
+    isAuth: false
+
 });
 
 export const signOutFailure = (error) => ({
