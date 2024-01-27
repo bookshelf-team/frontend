@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import {styled, alpha} from '@mui/material/styles';
 import {AppBar, Box, Toolbar, IconButton, Typography, InputBase, Button} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -8,9 +8,9 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import {useNavigate} from 'react-router-dom';
 import LeftPanelDrawer from './MainMenuDrawer';
 import {useDispatch, useSelector} from 'react-redux';
-import {signIn, signOut} from '../redux/auth-reducer';
-import { searchBooksByDBooksAPI } from '../redux/bookSearchService';
-import { setSearchResults } from '../redux/bookSearchActions';
+import { signOutSuccess} from '../redux/auth-reducer';
+import { searchBooksByDBooksAPI } from '../redux/bookSearch/bookSearchService';
+import { setSearchResults } from '../redux/bookSearch/bookSearchActions';
 import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
 import BookGenresAppBar from "./BookGenresAppBar";
 
@@ -57,12 +57,11 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 
 export default function SearchAppBar() {
     let navigate = useNavigate();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [topDrawerOpen, setTopDrawerOpen] = useState(false);
     const isAuthenticated = useSelector((state) => state.auth.isAuth);
     const dispatch = useDispatch();
-
-    const [drawerOpen, setDrawerOpen] = useState(false);
-
-    const [topDrawerOpen, setTopDrawerOpen] = useState(false);
 
     const openBookCatalogue = () => {
         setTopDrawerOpen(true);
@@ -73,16 +72,15 @@ export default function SearchAppBar() {
     };
 
     const handleExitClick = () => {
-        dispatch(signOut());
-        navigate('/signin');
+        sessionStorage.removeItem('jwtToken');
+        sessionStorage.removeItem('refreshToken');
+        dispatch(signOutSuccess());
+        navigate('/');
     };
 
     const handleLoginClick = () => {
-        dispatch(signIn());
-        navigate('/signin');
+        navigate('/signIn');
     };
-
-    const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
