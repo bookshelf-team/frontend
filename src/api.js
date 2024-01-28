@@ -140,3 +140,50 @@ export const bookAPI = {
     }
   },
 };
+
+export const profileAPI = {
+  async getProfileByUsername(username) {
+    try {
+      const response = await instance.get(`profile/${username}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async updateProfileByUsername(username, profileData) {
+    try {
+      const response = await instance.post(`profile/${username}`, profileData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async addBookToProfile(bookToProfileRelationRequest) {
+    try {
+      const response = await instance.post(`profile/add/book`, bookToProfileRelationRequest);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getProfileBooks(username) {
+    try {
+      const response = await instance.get(`profile/${username}/books`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async removeBookFromProfile(username, bookId) {
+    try {
+      const response = await instance.delete(`profile/${username}/books/${bookId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
