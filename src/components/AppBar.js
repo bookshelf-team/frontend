@@ -77,6 +77,9 @@ export default function SearchAppBar() {
         dispatch(signOutSuccess());
         navigate('/');
     };
+    const handleBackToHome = () => {
+        navigate('/');
+    };
 
     const handleLoginClick = () => {
         navigate('/signIn');
@@ -114,6 +117,8 @@ export default function SearchAppBar() {
                         noWrap
                         component="div"
                         sx={{mr: 1.3, color: 'white'}}
+                        onClick={handleBackToHome}
+                        title={"Home"}
                     >
                         BookShelf
                     </Typography>
