@@ -104,39 +104,55 @@ export const authAPI = {
 export const bookAPI = {
   async getAllBooks() {
     try {
-      return await instance.get(`book/all`);
+      const response = await instance.get(`book/all`);
+      return response.data;
     } catch (error) {
-      return error.response;
+      throw error;
     }
   },
+
   async getBookById(id) {
     try {
-      return await instance.get(`book/${id}`);
+      const response = await instance.get(`book/${id}`);
+      return response.data;
     } catch (error) {
-      return error.response;
+      throw error;
+    }
+  },
+
+  async getBookByIsbn(isbn) {
+    try {
+      const response = await instance.get(`book/search/isbn`, { params: { isbn } });
+      return response.data;
+    } catch (error) {
+      throw error;
     }
   },
 
   async getBooksByTitle(title) {
     try {
-      return await instance.get(`book/search/title`, { params: { title } });
+      const response = await instance.get(`book/search/title`, { params: { title } });
+      return response.data;
     } catch (error) {
-      return error.response;
+      throw error;
     }
   },
+
   async getBooksByAuthor(author) {
     try {
-      return await instance.get(`book/search/author`, { params: { author } });
+      const response = await instance.get(`book/search/author`, { params: { author } });
+      return response.data;
     } catch (error) {
-      return error.response;
+      throw error;
     }
   },
 
   async getBooksByGenre(genre) {
     try {
-      return await instance.get(`book/search/genre`, { params: { genre } });
+      const response = await instance.get(`book/search/genre`, { params: { genre } });
+      return response.data;
     } catch (error) {
-      return error.response;
+      throw error;
     }
   },
 };
