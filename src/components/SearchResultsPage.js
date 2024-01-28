@@ -5,6 +5,7 @@ import BooksGrid from './BooksGrid';
 import AppBar from './AppBar';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { Typography } from '@mui/material';
 
 const SearchResultsPage = () => {
     const navigate = useNavigate();
@@ -24,7 +25,13 @@ const SearchResultsPage = () => {
             >
                 <ArrowBackIosNewIcon />
             </IconButton>
-            <BooksGrid books={books} isCatalog={false} />
+            {books.length > 0 ? (
+                <BooksGrid books={books} isCatalog={false} />
+            ) : (
+                <Typography variant="h6" color="textSecondary" style={{ textAlign: 'center', marginTop: '20px', color: 'white', fontSize: 23 }}>
+                    За вашим запитом нічого не знайдено
+                </Typography>
+            )}
         </div>
     );
 };
