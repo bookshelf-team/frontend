@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActionArea, CardMedia } from '@mui/material';
+import { Card, CardActionArea, CardMedia} from '@mui/material';
 
 const BookCard = ({ book, isCatalog }) => {
     const handleClick = () => {
@@ -13,8 +13,8 @@ const BookCard = ({ book, isCatalog }) => {
         <Card sx={{ maxWidth: 170, maxHeight: 240 }} onClick={handleClick}>
             <CardActionArea>
                 <CardMedia
-                    sx={{ width: 170, height: 240, m: 'auto', display: 'block' }}
-                    image={book.image}
+                    sx={{ width: 170, height: 265, m: 'auto', display: 'block' }}
+                    image={book.coverImageUrl || book.image}
                 />
             </CardActionArea>
         </Card>
