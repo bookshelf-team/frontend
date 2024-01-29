@@ -122,7 +122,7 @@ export const bookAPI = {
 
   async getBookByIsbn(isbn) {
     try {
-      const response = await instance.get(`book/search/isbn`, { params: { isbn } });
+      const response = await instance.get(`book/search/isbn?isbn=${isbn}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -131,7 +131,7 @@ export const bookAPI = {
 
   async getBooksByTitle(title) {
     try {
-      const response = await instance.get(`book/search/title`, { params: { title } });
+      const response = await instance.get(`book/search/title?title=${title}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -140,7 +140,7 @@ export const bookAPI = {
 
   async getBooksByAuthor(author) {
     try {
-      const response = await instance.get(`book/search/author`, { params: { author } });
+      const response = await instance.get(`book/search/author?author=${author}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -149,14 +149,13 @@ export const bookAPI = {
 
   async getBooksByGenre(genre) {
     try {
-      const response = await instance.get(`book/search/genre`, { params: { genre } });
+      const response = await instance.get(`book/search/genre?genre=${genre}`);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
 };
-
 export const profileAPI = {
   async getProfileByUsername(username) {
     try {
