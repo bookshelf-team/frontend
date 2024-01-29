@@ -10,10 +10,10 @@ const BookCard = ({ book, isCatalog }) => {
     };
 
     return (
-        <Card sx={{ maxWidth: 170, maxHeight: 240 }} onClick={handleClick}>
+        <Card sx={{ maxWidth: 165, maxHeight: 255}} onClick={handleClick}>
             <CardActionArea>
                 <CardMedia
-                    sx={{ width: 170, height: 265, m: 'auto', display: 'block' }}
+                    sx={{ width: 165, height: 255, m: 'auto', display: 'block' }}
                     image={book.coverImageUrl || book.image}
                 />
             </CardActionArea>
