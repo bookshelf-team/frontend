@@ -8,6 +8,7 @@ import ProfileEditDialog from "./components/ProfileEditDialog";
 import SearchResultsPage from "./components/SearchResultsPage";
 import BookPage from "./pages/bookPage";
 import CatalogPage from "./components/CatalogPage";
+import {bookAPI} from "./api";
 
 function App() {
 
@@ -27,5 +28,27 @@ function App() {
         </Router>
     );
 }
+
+
+bookAPI.getAllBooks().then((books) => {
+    console.log("All Books:", books);
+});
+
+bookAPI.getBookById(1).then((book) => {
+    console.log("Book by ID:", book);
+});
+
+
+bookAPI.getBooksByTitle("Дюна").then((books) => {
+    console.log("Books by Title:", books);
+});
+
+bookAPI.getBooksByAuthor("J.K. Rowling").then((books) => {
+    console.log("Books by Author:", books);
+});
+
+bookAPI.getBooksByGenre("Science_Fiction").then((books) => {
+    console.log("Books by Genre:", books);
+});
 
 export default App;
