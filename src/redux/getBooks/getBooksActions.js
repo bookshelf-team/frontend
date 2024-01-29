@@ -4,3 +4,11 @@ export const getBooksSuccess = (books) => {
         payload: books
     }
 }
+
+export const setSearchResults = (results) => {
+    return {
+        type: 'SET_SEARCH_RESULTS',
+        results,
+    };
+};
+
