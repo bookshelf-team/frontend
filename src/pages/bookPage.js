@@ -7,6 +7,8 @@ import ClassIcon from '@mui/icons-material/Class';
 import Footer from "../components/Footer";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
+import {useDispatch} from "react-redux";
+import {addBookToProfile} from "../redux/profile/profileService";
 
 const book = {
     cover: 'https://static.yakaboo.ua/media/catalog/product/f/b/fbca87146bb849107d32a0ed9172f5d8.jpg',
@@ -16,6 +18,23 @@ const book = {
 const books = [book, book, book];
 
 export default function BookPage() {
+    const dispatch = useDispatch();
+
+    const bookToProfileRelationRequest = {
+        username: "test",
+        bookId: 1,
+        relationType: "read",
+    };
+
+    const handleBookAdding = async () => {
+        try {
+            const addedBook = await dispatch(addBookToProfile(bookToProfileRelationRequest));
+            console.log("Book added successfully: ", addedBook);
+        } catch (error) {
+            console.error("Error during adding book to profile: " + error);
+        }
+    }
+
     return (
         <Box>
             <AppBar/>
@@ -51,7 +70,8 @@ export default function BookPage() {
                         <Button variant="outlined" sx={{ marginTop:"15px", marginRight:"15px", color:"white"}}>Читаю
                             <ClassIcon sx={{marginLeft:"10px"}}/>
                         </Button>
-                        <Button variant="outlined" sx={{marginTop:"15px", color:"white"}}>Додати на полицю
+                        <Button variant="outlined" sx={{marginTop:"15px", color:"white"}}
+                                onClick={() => handleBookAdding()}>Додати на полицю
                             <CollectionsBookmarkIcon sx={{marginLeft:"10px"}}/> 
                         </Button>   
                     </Box>

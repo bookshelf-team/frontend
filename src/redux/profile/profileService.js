@@ -27,6 +27,7 @@ export const addBookToProfile = (bookToProfileRelationRequest) => async (dispatc
         dispatch(addBookSuccess(response.data));
     } catch (error) {
         console.error("Error during adding book to profile: " + error);
+        throw error;
     }
 }
 

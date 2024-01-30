@@ -6,11 +6,13 @@ import AppBar from './components/AppBar';
 import BookRecommendations from './components/BookRecomendation';
 import LastPostsUsers from './components/PostCard';
 import Footer from './components/Footer';
-
+import {useNavigate} from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function Main() {
+    const navigate = useNavigate();
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline/>
@@ -24,6 +26,7 @@ export default function Main() {
                         pb: 6,
                     }}
                 >
+                    <button onClick={function () {navigate("/book");}}>BookPage</button>
                     <BookRecommendations></BookRecommendations>
                     <LastPostsUsers></LastPostsUsers>
                 </Box>

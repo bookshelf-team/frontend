@@ -7,6 +7,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import TextInputField from "./TextInputField";
+import {useDispatch} from "react-redux";
+import {updateProfileByUsername} from "../redux/profile/profileService";
 
 export default function ProfileEditDialog() {
     const [open, setOpen] = useState(false);
@@ -23,6 +25,7 @@ export default function ProfileEditDialog() {
         iconFile: null,
     });
     const [changePassword, setChangePassword] = useState(false);
+    const dispatch = useDispatch();
 
     const handleClose = () => {
         setOpen(false);
@@ -45,7 +48,9 @@ export default function ProfileEditDialog() {
     };
 
     const handleSave = async () => {
-        //
+        const username = formData.username;
+        let data = await dispatch(updateProfileByUsername(username, formData));
+        console.log(data);
         setTimeout(() => {
             handleClose();
         }, 1000);

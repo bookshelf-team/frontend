@@ -17,7 +17,7 @@ instance.interceptors.request.use(
     }
 );
 
-instance.interceptors.response.use(
+/*instance.interceptors.response.use(
     (response) => {
       return response;
     },
@@ -44,7 +44,7 @@ instance.interceptors.response.use(
       }
       return Promise.reject(error);
     }
-);
+);*/
 
 export const authAPI = {
   async signIn(emailOrUsername, password) {
@@ -175,9 +175,9 @@ export const profileAPI = {
     }
   },
 
-  async addBookToProfile(bookToProfileRelationRequest) {
+  async addBookToProfile(bookRequest) {
     try {
-      const response = await instance.post(`profile/add/book`, bookToProfileRelationRequest);
+      const response = await instance.post(`profile/add/book`, bookRequest);
       return response.data;
     } catch (error) {
       throw error;
