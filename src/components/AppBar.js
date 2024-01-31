@@ -72,8 +72,6 @@ export default function SearchAppBar() {
     };
 
     const handleExitClick = () => {
-        sessionStorage.removeItem('jwtToken');
-        sessionStorage.removeItem('refreshToken');
         dispatch(signOutSuccess());
         navigate('/');
     };

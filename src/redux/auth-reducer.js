@@ -1,4 +1,5 @@
 import {authAPI} from "../api";
+import {clearAuthTokens, getAuthTokens, setAuthTokens} from "./auth-utils";
 
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
@@ -9,25 +10,31 @@ export const SIGN_OUT_FAILURE = 'SIGN_OUT_FAILURE';
 export const REFRESH_TOKEN_SUCCESS = 'REFRESH_TOKEN_SUCCESS';
 export const REFRESH_TOKEN_FAILURE = 'REFRESH_TOKEN_FAILURE';
 
-let initialState = {
-    isAuth: false,
-    jwtResponse: null,
-    errorMessage: null,
-    loading: false,
-    accessToken: null,
-    refreshToken: null,
-    tokenType: null
-}
+const getInitialState = () => {
+    const { accessToken, refreshToken, tokenType, isAuth } = getAuthTokens();
+    return {
+        isAuth: isAuth,
+        jwtResponse: null,
+        errorMessage: null,
+        loading: false,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        tokenType: tokenType,
+    };
+};
+
+let initialState = getInitialState();
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case SIGN_IN_SUCCESS:
-            localStorage.setItem('isAuth', 'true');
-            console.log('SIGN_IN_SUCCESS', action.payload);
+            const jwtResponse = action.payload;
+            setAuthTokens(jwtResponse.accessToken, jwtResponse.refreshToken, jwtResponse.tokenType);
+            console.log('SIGN_IN_SUCCESS', jwtResponse);
             return {
                 ...state,
                 isAuth: true,
-                jwtResponse: action.payload,
+                jwtResponse: jwtResponse,
                 errorMessage: null,
             };
         case SIGN_IN_FAILURE:
@@ -47,6 +54,7 @@ const authReducer = (state = initialState, action) => {
                 errorMessage: action.payload
             };
         case SIGN_OUT_SUCCESS:
+            clearAuthTokens();
             return {
                 ...state,
                 isAuth: false,
@@ -75,11 +83,17 @@ const authReducer = (state = initialState, action) => {
     }
 }
 
-export const signInSuccess = (jwtResponse) => ({
-    type: SIGN_IN_SUCCESS,
-    isAuth: true,
-    payload: jwtResponse,
-});
+export const signInSuccess = (jwtResponse) => {
+    localStorage.setItem('isAuth', 'true');
+    localStorage.setItem('accessToken', jwtResponse.accessToken);
+    localStorage.setItem('refreshToken', jwtResponse.refreshToken);
+    localStorage.setItem('tokenType', jwtResponse.tokenType);
+    return {
+        type: SIGN_IN_SUCCESS,
+        isAuth: true,
+        payload: jwtResponse,
+    };
+};
 
 export const signInFailure = (error) => ({
     type: SIGN_IN_FAILURE,
@@ -95,11 +109,16 @@ export const signUpFailure = (error) => ({
     payload: error
 });
 
-export const signOutSuccess = () => ({
-    type: SIGN_OUT_SUCCESS,
-    isAuth: false
-
-});
+export const signOutSuccess = () => {
+    localStorage.removeItem('isAuth');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenType');
+    return {
+        type: SIGN_OUT_SUCCESS,
+        isAuth: false
+    };
+};
 
 export const signOutFailure = (error) => ({
     type: SIGN_OUT_FAILURE,
@@ -118,10 +137,9 @@ export const refreshTokenFailure = (error) => ({
 
 export const signIn = (emailOrUsername, password) => async (dispatch) => {
     try {
-        const jwtResponse = await authAPI.signIn(emailOrUsername, password);
-        localStorage.setItem('accessToken', jwtResponse.accessToken);
-        localStorage.setItem('refreshToken', jwtResponse.refreshToken);
-        localStorage.setItem('tokenType', jwtResponse.tokenType);
+        const response = await authAPI.signIn(emailOrUsername, password);
+        const jwtResponse = response.data;
+        setAuthTokens(jwtResponse.accessToken, jwtResponse.refreshToken, jwtResponse.tokenType);
 
         dispatch(signInSuccess(jwtResponse));
     } catch (error) {
@@ -131,6 +149,7 @@ export const signIn = (emailOrUsername, password) => async (dispatch) => {
         dispatch(signInFailure(errorMessage));
     }
 };
+
 export const signUp = (userName, email, role, password) => async (dispatch) => {
     const response = await authAPI.signUp(userName, email, role, password);
     if (response.status === 200) {
