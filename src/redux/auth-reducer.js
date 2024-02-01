@@ -9,9 +9,10 @@ export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
 export const SIGN_OUT_FAILURE = 'SIGN_OUT_FAILURE';
 export const REFRESH_TOKEN_SUCCESS = 'REFRESH_TOKEN_SUCCESS';
 export const REFRESH_TOKEN_FAILURE = 'REFRESH_TOKEN_FAILURE';
+export const REFRESH_TOKEN_REQUEST = 'REFRESH_TOKEN_REQUEST';
 
 const getInitialState = () => {
-    const { accessToken, refreshToken, tokenType, isAuth } = getAuthTokens();
+    const { accessToken, refreshToken, type, isAuth, roles, username } = getAuthTokens();
     return {
         isAuth: isAuth,
         jwtResponse: null,
@@ -19,28 +20,34 @@ const getInitialState = () => {
         loading: false,
         accessToken: accessToken,
         refreshToken: refreshToken,
-        tokenType: tokenType,
+        type: type,
+        roles: roles,
+        username: username,
     };
 };
+
 
 let initialState = getInitialState();
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case SIGN_IN_SUCCESS:
-            const jwtResponse = action.payload;
-            setAuthTokens(jwtResponse.accessToken, jwtResponse.refreshToken, jwtResponse.tokenType);
-            console.log('SIGN_IN_SUCCESS', jwtResponse);
+            const {token, refreshToken, type, roles, username } = action.payload;
+            setAuthTokens(token, refreshToken, type, roles, username);
+            console.log('SIGN_IN_SUCCESS', action.payload);
             return {
                 ...state,
                 isAuth: true,
-                jwtResponse: jwtResponse,
+                jwtResponse: action.payload,
                 errorMessage: null,
+                roles: action.roles,
+                username: username,
             };
         case SIGN_IN_FAILURE:
+            console.error("Sign-in error: ", action.payload);
             return {
                 ...state,
-                errorMessage: action.payload,
+
             };
         case SIGN_UP_SUCCESS:
             return {
@@ -69,29 +76,33 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                accessToken: action.payload.accessToken,
+                accessToken: action.payload.token,
                 refreshToken: action.payload.refreshToken,
-                tokenType: action.payload.tokenType,
+                type: action.payload.type,
             };
         case REFRESH_TOKEN_FAILURE:
             return {
                 ...state,
                 errorMessage: action.payload
-            }
+            };
+        case REFRESH_TOKEN_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
         default:
             return state;
     }
 }
 
 export const signInSuccess = (jwtResponse) => {
-    localStorage.setItem('isAuth', 'true');
-    localStorage.setItem('accessToken', jwtResponse.accessToken);
-    localStorage.setItem('refreshToken', jwtResponse.refreshToken);
-    localStorage.setItem('tokenType', jwtResponse.tokenType);
+    const roles = jwtResponse.roles;
+    setAuthTokens(jwtResponse.token, jwtResponse.refreshToken, jwtResponse.type, roles, jwtResponse.username);
     return {
         type: SIGN_IN_SUCCESS,
         isAuth: true,
         payload: jwtResponse,
+        roles: roles,
     };
 };
 
@@ -110,15 +121,14 @@ export const signUpFailure = (error) => ({
 });
 
 export const signOutSuccess = () => {
-    localStorage.removeItem('isAuth');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('tokenType');
+    clearAuthTokens();
     return {
         type: SIGN_OUT_SUCCESS,
-        isAuth: false
+        isAuth: false,
+        roles: null,
     };
 };
+
 
 export const signOutFailure = (error) => ({
     type: SIGN_OUT_FAILURE,
@@ -138,10 +148,10 @@ export const refreshTokenFailure = (error) => ({
 export const signIn = (emailOrUsername, password) => async (dispatch) => {
     try {
         const response = await authAPI.signIn(emailOrUsername, password);
-        const jwtResponse = response.data;
-        setAuthTokens(jwtResponse.accessToken, jwtResponse.refreshToken, jwtResponse.tokenType);
+        const { token, refreshToken, type, roles, username } = response.data;
+        setAuthTokens(token, refreshToken, type, roles, username);
 
-        dispatch(signInSuccess(jwtResponse));
+        dispatch(signInSuccess(response.data));
     } catch (error) {
         const errorMessage = error.response && error.response.data && error.response.data.message
             ? error.response.data.message
@@ -150,7 +160,8 @@ export const signIn = (emailOrUsername, password) => async (dispatch) => {
     }
 };
 
-export const signUp = (userName, email, role, password) => async (dispatch) => {
+
+export const signUp = (userName, email, role = 'USER', password) => async (dispatch) => {
     const response = await authAPI.signUp(userName, email, role, password);
     if (response.status === 200) {
         dispatch(signUpSuccess(response.data));
@@ -161,7 +172,6 @@ export const signUp = (userName, email, role, password) => async (dispatch) => {
     }
     console.log(response.data);
 };
-
 
 export const signOut = () => async (dispatch) => {
     const response = await authAPI.signOut();
@@ -174,17 +184,6 @@ export const signOut = () => async (dispatch) => {
     } else {
         dispatch(signOutFailure("Unknown error during sign out"));
     }
-}
-
-export const refreshTokenRequest = (refreshToken) => async (dispatch) => {
-        const response = await authAPI.refreshTokenRequest(refreshToken);
-        if (response.status === 200) {
-            dispatch(refreshTokenSuccess(response.data));
-        } else if (response.status === 403) {
-            dispatch(refreshTokenFailure("Token Problem: Refresh token is not in database"));
-        } else {
-            dispatch(refreshTokenFailure("Unknown error during refreshing token"));
-        }
 }
 
 export default authReducer;
