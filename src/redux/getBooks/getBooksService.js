@@ -1,60 +1,75 @@
 import {bookAPI} from "../../api";
-import {getBooksSuccess} from "./getBooksActions";
+import {
+    getBookByIdFailure,
+    getBookByIdRequest,
+    getBookByIdSuccess, getBookByIsbnFailure, getBookByIsbnRequest,
+    getBookByIsbnSuccess,
+    getBooksSuccess
+} from "./getBooksActions";
 
-export const getAllBooks = async (dispatch) => {
+export const getAllBooks = () => async (dispatch) => {
     try {
-        let response = await bookAPI.getAllBooks();
-        dispatch(getBooksSuccess(response.data));
+        return await bookAPI.getAllBooks();
     } catch (error) {
-        console.error("Error during getting all books: ", error);
-        return [];
+        throw error;
     }
-}
+};
 
-export const getBookById = (id) => async (dispatch) => {
+export const getBookById = (bookId) => async (dispatch) => {
     try {
-        let response = await bookAPI.getBookById(id);
-        dispatch(getBooksSuccess(response.data));
+        console.log("Початок отримання книги за ID:", bookId);
+
+        dispatch(getBookByIdRequest());
+
+        const response = await bookAPI.getBookById(bookId);
+
+        console.log("Книгу отримано успішно:", response);
+
+        dispatch(getBookByIdSuccess(response));
     } catch (error) {
-        console.error("Error during getting books by id: ", error);
-        return [];
+        console.error("Помилка при завантаженні книги:", error);
+        dispatch(getBookByIdFailure(error));
     }
-}
+};
 
 export const getBookByIsbn = (isbn) => async (dispatch) => {
     try {
-        let response = await bookAPI.getBookByIsbn(isbn);
-        dispatch(getBooksSuccess(response.data));
+        console.log("Початок отримання книги за Isbn:", isbn);
+
+        dispatch(getBookByIsbnRequest());
+
+        const response = await bookAPI.getBookByIsbn(isbn);
+
+        console.log("Книгу отримано успішно:", response);
+
+        dispatch(getBookByIsbnSuccess(response));
     } catch (error) {
-        console.error("Error during getting books by isbn: " + error);
-        return [];
+        console.error("Помилка при завантаженні книги:", error);
+        dispatch(getBookByIsbnFailure(error));
+    }
+
+}
+
+export const getBooksByTitle  = async (title) => {
+    try {
+        return await bookAPI.getBooksByTitle(title);
+    } catch (error) {
+        throw error;
     }
 }
 
-export const getBooksByTitle = (title) => async (dispatch) => {
+export const getBooksByAuthor = async (author) => {
     try {
-        let response = await bookAPI.getBooksByTitle(title);
-        dispatch(getBooksSuccess(response.data));
+        return await bookAPI.getBooksByAuthor(author);
     } catch (error) {
-        console.error("Error during getting books by title: ", error);
-        return [];
-    }
-}
-
-export const getBooksByAuthor = (author) => async (dispatch) => {
-    try {
-        let response = await bookAPI.getBooksByAuthor(author);
-        dispatch(getBooksSuccess(response.data));
-    } catch (error) {
-        console.error("Error during getting books by author: ", error);
-        return [];
+        throw error;
     }
 }
 
 export const getBooksByGenre = ({params: {genre}}) => async (dispatch) => {
     try {
         let response = await bookAPI.getBooksByGenre(genre);
-        dispatch(getBooksSuccess(response.data));
+        dispatch(getBooksSuccess(response));
     } catch (error) {
         console.error("Error during getting books by genre: ", error);
         return [];
