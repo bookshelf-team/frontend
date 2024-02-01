@@ -7,7 +7,7 @@ import {
     getBooksSuccess
 } from "./getBooksActions";
 
-export const getAllBooks = () => async (dispatch) => {
+export const getAllBooks = () => async () => {
     try {
         return await bookAPI.getAllBooks();
     } catch (error) {
