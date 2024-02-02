@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { Box, Typography, Grid, CardMedia } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {setSearchResults} from "../redux/getBooks/getBooksActions";
-import {getAllBooks} from "../redux/getBooks/getBooksService";
+import { setSearchResults } from '../redux/getBooks/getBooksActions';
+import { getAllBooks } from '../redux/getBooks/getBooksService';
 
 export default function BookRecommendations() {
     const dispatch = useDispatch();
@@ -21,7 +21,11 @@ export default function BookRecommendations() {
         fetchBooks();
     }, [dispatch]);
 
-    const recommendedBooks = useSelector((state) => state.bookCatalogSearch.searchResultsCatalog.slice(0, 8));
+    const recommendedBooks = useSelector((state) => state.bookCatalogSearch.searchResultsCatalog);
+
+    const displayedBooks = Array.isArray(recommendedBooks) && recommendedBooks.length >= 8
+        ? recommendedBooks.slice(0, 8)
+        : [];
 
     return (
         <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 1, py: 1, marginLeft: 2 }}>
@@ -32,7 +36,7 @@ export default function BookRecommendations() {
                 Рекомендовані підбірки книг
             </Typography>
             <Grid container spacing={0}>
-                {recommendedBooks.map((book, index) => (
+                {displayedBooks.map((book, index) => (
                     <Grid item xs={4} sm={4} md={2} lg={1.5} key={index}>
                         <Link to={`/book/${book.isbn}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                             <CardMedia
