@@ -1,4 +1,6 @@
 export const clearAuthTokens = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem('type');
     localStorage.removeItem('isAuth');
@@ -20,8 +22,8 @@ export const setAuthTokens = (accessToken, refreshToken, type, roles, username) 
 };
 
 export const getAuthTokens = () => {
-    const accessToken = localStorage.getItem('token');
-    const refreshToken = localStorage.getItem('refreshToken');
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
     const type = localStorage.getItem('type');
     const isAuth = localStorage.getItem('isAuth') === 'true';
     const roles = localStorage.getItem('roles');
@@ -38,13 +40,20 @@ export const getAuthTokens = () => {
 };
 
 export const getAccessToken = () => {
-    return localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
+    return accessToken ? accessToken : null;
 };
 
 export const getRefreshToken = () => {
-    return localStorage.getItem("refreshToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    return refreshToken ? refreshToken : null;
 };
 
 export const getUsernameFromLocalStorage = () => {
     return localStorage.getItem('username');
 };
+export const logout = () => {
+    clearAuthTokens();
+    setAuthTokens(null, null);
+};
+

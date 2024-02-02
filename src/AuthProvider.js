@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import AuthContext from "./authContext";
-import { getAccessToken, getRefreshToken, setAuthTokens } from "./redux/auth-utils";
+import {getAccessToken, getRefreshToken, logout, setAuthTokens} from "./redux/auth-utils";
 import { authAPI } from "./api";
 import {jwtDecode} from "jwt-decode";
 
 const AuthProvider = ({ children }) => {
-    const [accessToken, setAccessToken] = useState(getAccessToken());
     const [refreshToken] = useState(getRefreshToken());
+    const [accessToken, setAccessToken] = useState(getAccessToken());
 
     useEffect(() => {
         const isTokenValid = () => {
-            if (!accessToken) {
+            console.log(accessToken);
+            if (!accessToken || typeof accessToken !== 'string' || accessToken.split('.').length !== 3) {
+                console.error("Invalid or malformed token:", accessToken);
                 return false;
             }
             try {
@@ -18,7 +20,7 @@ const AuthProvider = ({ children }) => {
                 const currentTime = Date.now() / 1000;
                 return decodedToken.exp > currentTime;
             } catch (error) {
-                console.error("Invalid token:", error);
+                console.error("Error decoding token:", error);
                 return false;
             }
         };
@@ -42,12 +44,7 @@ const AuthProvider = ({ children }) => {
         refreshAccessToken();
     }, [accessToken, refreshToken]);
 
-    const value = {
-        accessToken,
-        refreshToken,
-    };
-
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ accessToken, refreshToken, logout }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

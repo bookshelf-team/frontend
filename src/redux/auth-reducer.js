@@ -1,5 +1,5 @@
 import {authAPI} from "../api";
-import {clearAuthTokens, getAuthTokens, setAuthTokens} from "./auth-utils";
+import {clearAuthTokens, getAuthTokens, logout, setAuthTokens} from "./auth-utils";
 
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
@@ -122,6 +122,7 @@ export const signUpFailure = (error) => ({
 
 export const signOutSuccess = () => {
     clearAuthTokens();
+    logout();
     return {
         type: SIGN_OUT_SUCCESS,
         isAuth: false,
