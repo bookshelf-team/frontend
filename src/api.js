@@ -211,3 +211,59 @@ export const profileAPI = {
         }
     }
 };
+
+export const postAPI = {
+    async getAllPosts() {
+        try {
+            return await instance.get(`post/all`);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async getAllPostsByUsername(username) {
+        try {
+            const response = await instance.get(`post/username?username=${username}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async getPostById(id) {
+        try {
+            const response= await instance.get(`post/${id}`)
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async addPost(postData) {
+        try {
+            const response = await instance.post(`post/add`, postData);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async updatePostById(id, postData) {
+        try {
+            const response = await instance.post(`post/id?id=${id}`, postData);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async deletePostById(id) {
+        try {
+            const response = await instance.delete(`post/delete/id?id=${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+};
+
