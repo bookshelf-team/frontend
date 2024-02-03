@@ -6,7 +6,7 @@ const instance = axios.create({
 
 instance.interceptors.response.use(
     async (response) => {
-        if (response.status === 200) {
+        if (response) {
             const token = response.headers['authorization'];
             const refreshToken = response.data.refreshToken;
             if (token && refreshToken) {
@@ -24,7 +24,9 @@ instance.interceptors.response.use(
                     const response = await authAPI.refreshTokenRequest(refreshToken);
                     if (response.status === 200) {
                         const newAccessToken = response.headers['authorization'];
+                        const newRefreshToken = response.data.refreshToken;
                         localStorage.setItem("accessToken", newAccessToken);
+                        localStorage.setItem("refreshToken", newRefreshToken);
                         axios.defaults.headers.common["Authorization"] = 'Bearer ' + newAccessToken;
                         error.config.headers["Authorization"] = 'Bearer ' + newAccessToken;
                         return axios(error.config);
@@ -37,6 +39,16 @@ instance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+instance.interceptors.request.use((config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
 export const authAPI = {
     async signIn(emailOrUsername, password) {
@@ -85,9 +97,11 @@ export const authAPI = {
     async refreshTokenRequest(refreshToken) {
         try {
             const response = await instance.post(`auth/refresh`, {refreshToken});
-            if (response.status === 200) {
-                const newAccessToken = response.headers["authorization"];
+            if (response.status === 200 && response.data.accessToken && response.data.refreshToken) {
+                const newAccessToken = response.data.accessToken; // або response.headers["authorization"];
+                const newRefreshToken = response.data.refreshToken;
                 localStorage.setItem("accessToken", newAccessToken);
+                localStorage.setItem("refreshToken", newRefreshToken);
                 axios.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
             }
             return response;
@@ -163,20 +177,12 @@ export const profileAPI = {
     },
     async addBookToProfile(bookToProfileRelationRequest) {
         try {
-            const token = localStorage.getItem("accessToken");
-            const headers = {
-                Authorization: `Bearer ${token}`,
-            };
-
-            const response = await instance.post(`profile/add/book`, bookToProfileRelationRequest, { headers });
-            console.log('Відповідь від сервера:', response.data);
+            const response = await instance.post(`profile/book/add`, bookToProfileRelationRequest);
             return response.data;
         } catch (error) {
             throw error;
         }
     },
-
-
     async updateProfileByUsername(username, profileData) {
         try {
             const response = await instance.post(`profile/${username}`, profileData);

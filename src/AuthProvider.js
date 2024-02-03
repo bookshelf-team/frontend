@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import AuthContext from "./authContext";
-import {getAccessToken, getRefreshToken, logout, setAuthTokens} from "./redux/auth-utils";
-import { authAPI } from "./api";
+import { getAccessToken, getRefreshToken, logout } from "./redux/auth-utils";
+import { useDispatch } from "react-redux";
+import { refreshAccessToken } from "./redux/auth-reducer";
 import {jwtDecode} from "jwt-decode";
 
 const AuthProvider = ({ children }) => {
-    const [refreshToken] = useState(getRefreshToken());
-    const [accessToken, setAccessToken] = useState(getAccessToken());
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        const accessTokenFromStorage = getAccessToken();
+        const refreshTokenFromStorage = getRefreshToken();
+
         const isTokenValid = () => {
-            console.log(accessToken);
-            if (!accessToken || typeof accessToken !== 'string' || accessToken.split('.').length !== 3) {
-                console.error("Invalid or malformed token:", accessToken);
+            if (!accessTokenFromStorage || typeof accessTokenFromStorage !== 'string' || accessTokenFromStorage.split('.').length !== 3) {
+                console.error("Invalid or malformed token:", accessTokenFromStorage);
                 return false;
             }
             try {
-                const decodedToken = jwtDecode(accessToken);
+                const decodedToken = jwtDecode(accessTokenFromStorage);
                 const currentTime = Date.now() / 1000;
                 return decodedToken.exp > currentTime;
             } catch (error) {
@@ -25,26 +27,22 @@ const AuthProvider = ({ children }) => {
             }
         };
 
-        const refreshAccessToken = async () => {
-            if (!isTokenValid() && refreshToken) {
-                try {
-                    const response = await authAPI.refreshTokenRequest(refreshToken);
-                    if (response.status === 200) {
-                        const newAccessToken = response.headers["authorization"];
-                        setAccessToken(newAccessToken);
-                        setAuthTokens(newAccessToken, refreshToken);
-                    }
-                } catch (error) {
-                    console.error("Error refreshing token:", error);
-                }
+        const refreshAccessTokenHandler = async () => {
+            if (!isTokenValid() && refreshTokenFromStorage) {
+                dispatch(refreshAccessToken());
             }
         };
 
+        refreshAccessTokenHandler();
+    }, [dispatch]);
 
-        refreshAccessToken();
-    }, [accessToken, refreshToken]);
+    const contextValue = {
+        accessToken: getAccessToken(),
+        refreshToken: getRefreshToken(),
+        logout,
+    };
 
-    return <AuthContext.Provider value={{ accessToken, refreshToken, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
