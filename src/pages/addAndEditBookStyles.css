@@ -1,0 +1,7 @@
+.uploadImage {
+    border: 1px solid #aaa8a8;
+}
+
+.uploadImage input {
+    display: none;
+}
