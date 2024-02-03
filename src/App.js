@@ -9,6 +9,8 @@ import SearchResultsPage from "./components/SearchResultsPage";
 import BookPage from "./pages/bookPage";
 import CatalogPage from "./components/CatalogPage";
 import {bookAPI} from "./api";
+import AddBook from "./pages/addBook";
+import EditBook from "./pages/editBook";
 
 function App() {
 
@@ -24,6 +26,8 @@ function App() {
                 <Route path="/searchresults" element={<SearchResultsPage />} />
                 <Route path="/book" element={<BookPage/>}/>
                 <Route path="/catalogpage" element={<CatalogPage />} />
+                <Route path="/addbook" element={<AddBook />} />
+                <Route path="/editbook" element={<EditBook />} />
             </Routes>
         </Router>
     );
