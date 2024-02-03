@@ -1,11 +1,17 @@
 import React from 'react';
 import { Card, CardActionArea, CardMedia} from '@mui/material';
+import {useNavigate} from "react-router-dom";
 
 const BookCard = ({ book, isCatalog }) => {
+    const navigate = useNavigate();
     const handleClick = () => {
         if (isCatalog) {
         } else {
-            window.open(book.url, '_blank');
+            if (book && book.isbn) {
+                navigate(`/book/${book.isbn}`);
+            } else {
+                window.open(book.url, '_blank');
+            }
         }
     };
 

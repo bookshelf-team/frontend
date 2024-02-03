@@ -1,5 +1,5 @@
 import {authAPI} from "../api";
-import {clearAuthTokens, getAuthTokens, setAuthTokens} from "./auth-utils";
+import {clearAuthTokens, getAuthTokens, getRefreshToken, logout, setAuthTokens} from "./auth-utils";
 
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
@@ -25,7 +25,6 @@ const getInitialState = () => {
         username: username,
     };
 };
-
 
 let initialState = getInitialState();
 
@@ -73,6 +72,7 @@ const authReducer = (state = initialState, action) => {
                 errorMessage: action.payload
             }
         case REFRESH_TOKEN_SUCCESS:
+            setAuthTokens(action.payload.token, action.payload.refreshToken, state.type, state.roles, state.username);
             return {
                 ...state,
                 loading: false,
@@ -122,6 +122,7 @@ export const signUpFailure = (error) => ({
 
 export const signOutSuccess = () => {
     clearAuthTokens();
+    logout();
     return {
         type: SIGN_OUT_SUCCESS,
         isAuth: false,
@@ -144,6 +145,28 @@ export const refreshTokenFailure = (error) => ({
     type: REFRESH_TOKEN_FAILURE,
     payload: error
 })
+
+export const refreshAccessToken = () => async (dispatch) => {
+    try {
+        const refreshToken = getRefreshToken();
+        if (refreshToken) {
+            const response = await authAPI.refreshTokenRequest(refreshToken);
+            if (response) {
+                const newAccessToken = response.headers["authorization"];
+                localStorage.setItem("accessToken", newAccessToken);
+                setAuthTokens(newAccessToken, refreshToken);
+
+                dispatch(refreshTokenSuccess({ token: newAccessToken, refreshToken, type: response.data.type }));
+            } else {
+                dispatch(refreshTokenFailure("Failed to refresh access token"));
+            }
+        } else {
+            dispatch(refreshTokenFailure("No refresh token available"));
+        }
+    } catch (error) {
+        dispatch(refreshTokenFailure("Error refreshing token"));
+    }
+};
 
 export const signIn = (emailOrUsername, password) => async (dispatch) => {
     try {

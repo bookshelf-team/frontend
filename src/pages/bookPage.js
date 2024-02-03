@@ -13,6 +13,37 @@ import { getBookByIsbn} from "../redux/getBooks/getBooksService";
 import {addBookToProfile} from "../redux/profile/profileService";
 import {getUsernameFromLocalStorage} from "../redux/auth-utils";
 
+const genreMappings = {
+    GENRE_FANTASY: 'Фентезі',
+    GENRE_ADVENTURE: 'Пригоди',
+    GENRE_ROMANCE: 'Романтика',
+    GENRE_CONTEMPORARY: 'Сучасна література',
+    GENRE_DYSTOPIAN: 'Дистопія',
+    GENRE_MYSTERY: 'Містика',
+    GENRE_HORROR: 'Жахи',
+    GENRE_THRILLER: 'Трилер',
+    GENRE_PARANORMAL: 'Паранормальне',
+    GENRE_HISTORICAL_FICTION: 'Історична художня література',
+    GENRE_SCIENCE_FICTION: 'Наукова фантастика',
+    GENRE_CHILDREN: 'Дитяча література',
+    GENRE_MEMOIR: 'Мемуари',
+    GENRE_COOKBOOK: 'Кулінарна книга',
+    GENRE_ART: 'Мистецтво',
+    GENRE_SELF_HELP: 'Самодопомога',
+    GENRE_PERSONAL_DEVELOPMENT: 'Особистісний розвиток',
+    GENRE_MOTIVATIONAL: 'Мотиваційна література',
+    GENRE_HEALTH: 'Здоровя',
+    GENRE_HISTORY: 'Історія',
+    GENRE_TRAVEL: 'Подорожі',
+    GENRE_GUIDE: 'Путівник',
+    GENRE_RELATIONSHIPS: 'Відносини',
+    GENRE_HUMOR: 'Гумор',
+};
+
+const getUkrainianGenreName = (englishGenreKey) => {
+    return genreMappings[englishGenreKey] || englishGenreKey;
+};
+
 const book = {
     cover: 'https://static.yakaboo.ua/media/catalog/product/f/b/fbca87146bb849107d32a0ed9172f5d8.jpg',
     title: 'Гіпотеза кохання',
@@ -87,6 +118,10 @@ export default function BookPage() {
         return <div>Loading...</div>;
     }
 
+    const displayedGenres = book.genres.map((genreObj) => getUkrainianGenreName(genreObj.name));
+    console.log("English Genre Keys:", book.genres.map(genre => genre.name));
+    console.log("Ukrainian Genres:", displayedGenres);
+
     return (
         <Box>
             <AppBar />
@@ -101,23 +136,23 @@ export default function BookPage() {
                         />
                     </Box>
                     <Box sx={{ color: "white" }}>
-                        <Breadcrumbs aria-label="breadcrumb" marginBottom="75px">
+                        <Breadcrumbs aria-label="breadcrumb" marginBottom="100px" sx={{ color: "white" }} >
                             <Link underline="hover" color="white" href="/">
-                                MUI
+                                Bookshelf
                             </Link>
-                            <Link underline="hover" color="white" href="/material-ui/getting-started/installation/" >
-                                Core
+                            <Link underline="none" color="white">
+                                Жанр
                             </Link>
-                            <Typography color="white">Breadcrumbs</Typography>
+                            <Typography color="white">{displayedGenres.join(', ')}</Typography>
                         </Breadcrumbs>
-                        <Typography variant="body1" component="div" sx={{ marginTop: 1 }}>
+                        <Typography variant="body1" component="div" sx={{ marginTop: 1, fontSize: 20}}>
                             {book.title}
                         </Typography>
-                        <Typography variant="body2">
+                        <Typography variant="body2" sx={{ fontSize: 17}}>
                             {book.author}
                         </Typography>
-                        <Typography variant="body2" component="div" sx={{ opacity: "0.4" }}>
-                            {book.genre}
+                        <Typography variant="body2" component="div" sx={{ opacity: "0.4", fontSize: 17 }}>
+                            {displayedGenres.join(', ')}
                         </Typography>
                         <Button variant="outlined" sx={{ marginTop: "15px", marginRight: "15px", color: "white" }}
                                 onClick={()=> handleBookRead()}>Читаю

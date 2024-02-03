@@ -71,8 +71,6 @@ export default function UserProfile() {
         setValue(newValue);
     };
 
-    console.log('Дані'+ profile);
-
     return (
         <Box sx={{ width: '100%', height: '100%', backgroundColor: '#23232B' }}>
             <Box sx={{ position: 'absolute', top: 0, left: 0, zIndex: 1201 }}>
