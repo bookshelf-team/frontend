@@ -36,6 +36,7 @@ export default function SignUp() {
         email: "",
         password: "",
         confirmPassword: "",
+        role: ["user"],
     });
     const [passwordsMatch, setPasswordsMatch] = useState(true);
 
@@ -46,11 +47,19 @@ export default function SignUp() {
             return;
         }
         try {
-            await dispatch(signUp(formData.username, formData.email, [], formData.password));
+            await dispatch(
+                signUp(
+                    formData.username,
+                    formData.email,
+                    formData.role,
+                    formData.password
+                )
+            );
             console.log({
                 username: formData.username,
                 email: formData.email,
                 password: formData.password,
+                role: formData.role,
             });
         } catch (error) {
             console.error('Error during sign up:', error);
