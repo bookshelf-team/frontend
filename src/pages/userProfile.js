@@ -100,13 +100,18 @@ export default function UserProfile() {
                 alignItems: 'center',
             }}>
                 <Box sx={{ display: 'flex', width: '90%', position: 'relative', top: '-55px', alignItems: 'flex-end', }}>
-                    <Avatar sx={{
-                        background: "gray",
-                        width: '140px',
-                        height: '160px',
-                        borderRadius: '15px',
-                        marginRight: '20px'
-                    }} variant="square">N</Avatar>
+                    <Avatar
+                        sx={{
+                            background: "gray",
+                            width: '140px',
+                            height: '160px',
+                            borderRadius: '15px',
+                            marginRight: '20px'
+                        }}
+                        variant="square"
+                        src={profile && profile.avatar ? profile.avatar : undefined}
+                        alt={`${profile && profile.firstName ? profile.firstName : ''} ${profile && profile.lastName ? profile.lastName : ''}`}
+                    />
                     <Box sx={{ display: 'flex', flexDirection: 'column', }}>
                         <Typography variant="h3" color={'white'}>
                             {profile && profile.firstName && profile.lastName

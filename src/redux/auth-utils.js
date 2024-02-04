@@ -50,10 +50,12 @@ export const getRefreshToken = () => {
 };
 
 export const getUsernameFromLocalStorage = () => {
-    return localStorage.getItem('username');
+    const username = localStorage.getItem('username');
+    return username ? username : undefined;
 };
+
 export const logout = () => {
     clearAuthTokens();
-    setAuthTokens(null, null);
+    setAuthTokens(null, null, null, null, undefined);
 };
 

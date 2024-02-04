@@ -94,6 +94,18 @@ export const authAPI = {
             return error.response;
         }
     },
+    async changePassword(username, oldPassword, newPassword) {
+        try {
+            const response = await instance.post(`auth/password/change`, {
+                username,
+                oldPassword,
+                newPassword,
+            });
+            return response.data;
+        } catch (error) {
+            return error.response;
+        }
+    },
     async refreshTokenRequest(refreshToken) {
         try {
             const response = await instance.post(`auth/refresh`, {refreshToken});
@@ -165,16 +177,23 @@ export const bookAPI = {
             throw error;
         }
     },
+<<<<<<< HEAD
 
     async addBook(bookData) {
         try {
             const response = await instance.post(`book/add`, bookData);
             console.log(response.data);
+=======
+    async addBook(bookData) {
+        try {
+            const response = await instance.post(`book/add`, bookData);
+>>>>>>> 568e89630bf12287d43f974d34d8efa9cc00e50c
             return response.data;
         } catch (error) {
             throw error;
         }
     },
+<<<<<<< HEAD
 
     async editBookById(id, bookData) {
         try {
@@ -212,6 +231,8 @@ export const bookAPI = {
             throw error;
         }
     }
+=======
+>>>>>>> 568e89630bf12287d43f974d34d8efa9cc00e50c
 };
 export const profileAPI = {
     async getProfileByUsername(username) {
