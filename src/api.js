@@ -94,6 +94,18 @@ export const authAPI = {
             return error.response;
         }
     },
+    async changePassword(username, oldPassword, newPassword) {
+        try {
+            const response = await instance.post(`auth/password/change`, {
+                username,
+                oldPassword,
+                newPassword,
+            });
+            return response.data;
+        } catch (error) {
+            return error.response;
+        }
+    },
     async refreshTokenRequest(refreshToken) {
         try {
             const response = await instance.post(`auth/refresh`, {refreshToken});
@@ -160,6 +172,14 @@ export const bookAPI = {
     async getBooksByGenre(genre) {
         try {
             const response = await instance.get(`book/search/genre?genre=${genre}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+    async addBook(bookData) {
+        try {
+            const response = await instance.post(`book/add`, bookData);
             return response.data;
         } catch (error) {
             throw error;
