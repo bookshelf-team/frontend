@@ -5,6 +5,7 @@ import {thunk} from "redux-thunk";
 import profileReducer from "./profile/profileReducer";
 import bookSearchCatalogReducer from "./getBooks/getBooksReducer";
 import postReducer from "./post/postReducer";
+import {addBooksReducer} from "./addBooks/addBooksReducer";
 
 const reducers = combineReducers({
     auth: authReducer,
@@ -13,6 +14,7 @@ const reducers = combineReducers({
     bookCatalogSearch: bookSearchCatalogReducer,
     bookPage: bookSearchCatalogReducer,
     posts: postReducer,
+    addBooks: addBooksReducer
 });
 
 const store = createStore(reducers, applyMiddleware(thunk));

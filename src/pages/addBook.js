@@ -2,15 +2,45 @@ import {Box, CssBaseline, IconButton, ThemeProvider, Typography} from "@mui/mate
 import Container from "@mui/material/Container";
 import {createTheme} from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import React from "react";
+import React, {useState} from "react";
 import Button from "@mui/material/Button";
 import StraightIcon from '@mui/icons-material/Straight';
 import CloseIcon from '@mui/icons-material/Close';
 import './addAndEditBookStyles.css';
+import {useDispatch} from "react-redux";
+import {addBook} from "../redux/addBooks/addBooksService";
 
 const defaultTheme = createTheme();
 
 export default function AddBook() {
+    const [bookData, setBookData] = useState({
+        author: "John Doe",
+        title: "Just a Book",
+        description: "Just a simple description",
+        publicationYear: 2024,
+        isbn: 1234567890123,
+        pageCount: 300,
+        genres: ["horror"]
+    });
+    const dispatch = useDispatch();
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setBookData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const data = await dispatch(addBook(bookData));
+            console.log(data);
+        } catch (error) {
+            console.error("Error during handling submit: " + error);
+        }
+    }
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
@@ -37,7 +67,9 @@ export default function AddBook() {
                             autoComplete="book title"
                             autoFocus
                             placeholder="Введіть текст..."
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
+                            value={bookData.title}
+                            onChange={handleChange}
                         />
                         <TextField
                             margin="normal"
@@ -48,7 +80,9 @@ export default function AddBook() {
                             name="author"
                             autoComplete="book author"
                             placeholder="Введіть текст..."
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
+                            value={bookData.author}
+                            onChange={handleChange}
                         />
                         <TextField
                             margin="normal"
@@ -59,10 +93,13 @@ export default function AddBook() {
                             name="genre"
                             autoComplete="book genre"
                             placeholder="Введіть текст..."
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
+                            value={bookData.genres}
+                            onChange={handleChange}
                         />
                         <div className="uploadImage">
-                            <input type="file" id="image-upload"/>
+                            <input type="file" id="image-upload" value={bookData.coverImageUrl}
+                                   onChange={handleChange}/>
                             <label htmlFor="image-upload">
                                 <Button component="span" endIcon={<StraightIcon/>}>
                                     Завантажити
@@ -78,9 +115,11 @@ export default function AddBook() {
                             name="description"
                             autoComplete="book description"
                             placeholder="Введіть текст..."
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
+                            value={bookData.description}
+                            onChange={handleChange}
                         />
-                        <Button variant="contained" component="span">
+                        <Button variant="contained" onClick={handleSubmit}>
                             Готово
                         </Button>
                     </Box>

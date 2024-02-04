@@ -165,6 +165,53 @@ export const bookAPI = {
             throw error;
         }
     },
+
+    async addBook(bookData) {
+        try {
+            const response = await instance.post(`book/add`, bookData);
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async editBookById(id, bookData) {
+        try {
+            const response = await instance.post(`book/id?id=${id}`, bookData);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async editBookByIsbn(isbn, bookData) {
+        try {
+            const response = await instance.post(`book/isbn?isbn=${isbn}`, bookData);
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async deleteBookById(id) {
+        try {
+            const response = await instance.delete(`book/delete/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async deleteBookByIsbn(isbn) {
+        try {
+            const response = await instance.delete(`book/delete/${isbn}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 };
 export const profileAPI = {
     async getProfileByUsername(username) {
@@ -191,7 +238,6 @@ export const profileAPI = {
             throw error;
         }
     },
-
 
     async getProfileBooks(username) {
         try {

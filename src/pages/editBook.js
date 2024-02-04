@@ -2,17 +2,49 @@ import {Box, CssBaseline, IconButton, InputAdornment, ThemeProvider, Typography}
 import Container from "@mui/material/Container";
 import {createTheme} from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import React from "react";
+import React, {useState} from "react";
 import Button from "@mui/material/Button";
 import StraightIcon from '@mui/icons-material/Straight';
 import CloseIcon from '@mui/icons-material/Close';
 import './addAndEditBookStyles.css';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import {useDispatch} from "react-redux";
+import {addBook, editBookById, editBookByIsbn} from "../redux/addBooks/addBooksService";
 
 const defaultTheme = createTheme();
 
 export default function EditBook() {
+    const [bookData, setBookData] = useState({
+        author: "John Doe",
+        title: "Just a Book",
+        description: "Just a simple description",
+        publicationYear: 2024,
+        isbn: 1234567890123,
+        pageCount: 300,
+        coverImageUrl: null,
+        diskImageUrl: null,
+        genres: ["horror"]
+    });
+    const dispatch = useDispatch();
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setBookData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const data = await dispatch(editBookByIsbn(bookData.isbn));
+            console.log(data);
+        } catch (error) {
+            console.error("Error during handling submit: " + error);
+        }
+    }
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
@@ -28,7 +60,7 @@ export default function EditBook() {
                     </IconButton>
                     <Typography component="h2">Додати нову книгу</Typography>
                     <Typography component="p">Заповніть поля нижче</Typography>
-                    <Box component="form" sx={{mt: 1}}>
+                    <Box component="form" sx={{mt: 1}} >
                         <TextField
                             margin="normal"
                             fullWidth
@@ -48,6 +80,8 @@ export default function EditBook() {
                                 ),
                             }}
                             InputLabelProps={{ shrink: true }}
+                            value={bookData.title}
+                            onChange={handleChange}
                         />
                         <TextField
                             margin="normal"
@@ -67,6 +101,8 @@ export default function EditBook() {
                                 ),
                             }}
                             InputLabelProps={{ shrink: true }}
+                            value={bookData.author}
+                            onChange={handleChange}
                         />
                         <TextField
                             margin="normal"
@@ -86,9 +122,12 @@ export default function EditBook() {
                                 ),
                             }}
                             InputLabelProps={{ shrink: true }}
+                            value={bookData.genres}
+                            onChange={handleChange}
                         />
                         <div className="uploadImage">
-                            <input type="file" id="image-upload"/>
+                            <input type="file" id="image-upload" value={bookData.coverImageUrl}
+                                   onChange={handleChange}/>
                             <label htmlFor="image-upload">
                                 <div>
                                     <Button component="span" endIcon={<DeleteOutlinedIcon/>}>
@@ -118,8 +157,10 @@ export default function EditBook() {
                                 ),
                             }}
                             InputLabelProps={{ shrink: true }}
+                            value={bookData.description}
+                            onChange={handleChange}
                         />
-                        <Button variant="contained" component="span">
+                        <Button variant="contained" onClick={handleSubmit}>
                             Готово
                         </Button>
                     </Box>
