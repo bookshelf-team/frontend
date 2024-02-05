@@ -13,6 +13,10 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useDispatch, useSelector} from "react-redux";
 import {getUsernameFromLocalStorage} from "../redux/auth-utils";
 import {getProfileByUsername} from "../redux/profile/profileService";
+import EditBook from '../components/editBook';
+import AddBook from '../components/addBook';
+import AddPost from '../components/addPost';
+import EditPost from '../components/editPost';
 
 export default function UserProfile() {
     let navigate = useNavigate();
@@ -87,6 +91,10 @@ export default function UserProfile() {
             <header className='profile-header'>
                 <Button variant="text" sx={{ color: "white", }}>Новий допис</Button>
                 <ProfileEditDialog></ProfileEditDialog>
+                <EditBook></EditBook>
+                <AddBook></AddBook>
+                <AddPost></AddPost>
+                <EditPost></EditPost>
             </header>
             <Box sx={{
                 width: '100%',
