@@ -1,5 +1,6 @@
 import {authAPI} from "../api";
 import {clearAuthTokens, getAuthTokens, getRefreshToken, logout, setAuthTokens} from "./auth-utils";
+import axios from "axios";
 
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
@@ -46,8 +47,10 @@ const authReducer = (state = initialState, action) => {
             console.error("Sign-in error: ", action.payload);
             return {
                 ...state,
-
+                isAuth: false,
+                errorMessage: action.payload
             };
+
         case SIGN_UP_SUCCESS:
             return {
                 ...state,
@@ -209,4 +212,19 @@ export const signOut = () => async (dispatch) => {
     }
 }
 
+export const changePasswordRequest = async (changePasswordData) => {
+    try {
+        const response = await axios.post(
+            `http://localhost:8080/password/change`,
+            changePasswordData
+        );
+        if (response.status === 200) {
+            return "Password changed successfully";
+        } else {
+            throw new Error("Failed to change password");
+        }
+    } catch (error) {
+        throw error;
+    }
+}
 export default authReducer;

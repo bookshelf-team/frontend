@@ -1,45 +1,32 @@
-import React,  { useState } from "react";
 import {Box, CssBaseline, IconButton, InputAdornment, ThemeProvider, Typography} from "@mui/material";
 import Container from "@mui/material/Container";
 import {createTheme} from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import React from "react";
 import Button from "@mui/material/Button";
 import StraightIcon from '@mui/icons-material/Straight';
 import CloseIcon from '@mui/icons-material/Close';
+import './addAndEditBookStyles.css';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import Dialog from "@mui/material/Dialog";
 
 const defaultTheme = createTheme();
 
-export default function EditBook(){
-
-    const [open, setOpen] = useState(false); 
-    const handleClose = () => {
-        setOpen(false);
-    }; 
-
+export default function EditBook() {
     return (
-
-    <div>
-
-        <Button onClick={() => setOpen(true)} sx={{ color: "white", marginRight: "40px" }}>Редагувати книгу</Button>
-
-        <Dialog open={open} onClose={handleClose}>
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
                 <Box sx={{
-                    marginTop: 5,
-                    marginBottom: 5,
+                    marginTop: 8,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                 }}>
-                    <IconButton aria-label="Close" onClick={() => setOpen(false)} sx={{marginBottom:"10px"}}>
+                    <IconButton aria-label="Close">
                         <CloseIcon/>
                     </IconButton>
-                    <Typography variant="h4" fontWeight="700" >Редагувати книгу</Typography>
+                    <Typography component="h2">Додати нову книгу</Typography>
                     <Typography component="p">Заповніть поля нижче</Typography>
                     <Box component="form" sx={{mt: 1}}>
                         <TextField
@@ -97,23 +84,25 @@ export default function EditBook(){
                                         </IconButton>
                                     </InputAdornment>
                                 ),
-                            }} 
+                            }}
                             InputLabelProps={{ shrink: true }}
                         />
-                                <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                        <div className="uploadImage">
+                            <input type="file" id="image-upload"/>
+                            <label htmlFor="image-upload">
+                                <div>
                                     <Button component="span" endIcon={<DeleteOutlinedIcon/>}>
-                                        Видалити фото
+                                        Видалити
                                     </Button>
                                     <Button component="span" endIcon={<EditOutlinedIcon/>}>
-                                        Замінити фото
+                                        Замінити
                                     </Button>
                                 </div>
-                        
+                            </label>
+                        </div>
                         <TextField
                             margin="normal"
                             fullWidth
-                            multiline
-                            rows={4}
                             id="description"
                             label="Короткий опис"
                             name="description"
@@ -130,16 +119,12 @@ export default function EditBook(){
                             }}
                             InputLabelProps={{ shrink: true }}
                         />
-                        <Button variant="contained" component="span" sx={{width:"100%", bgcolor:"#746BD1", marginTop:"10px", marginBottom:"5px"}}>
+                        <Button variant="contained" component="span">
                             Готово
                         </Button>
                     </Box>
                 </Box>
             </Container>
         </ThemeProvider>
-
-        </Dialog>
-    
-    </div>
     )
 }

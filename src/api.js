@@ -94,6 +94,18 @@ export const authAPI = {
             return error.response;
         }
     },
+    async changePassword(username, oldPassword, newPassword) {
+        try {
+            const response = await instance.post(`auth/password/change`, {
+                username,
+                oldPassword,
+                newPassword,
+            });
+            return response.data;
+        } catch (error) {
+            return error.response;
+        }
+    },
     async refreshTokenRequest(refreshToken) {
         try {
             const response = await instance.post(`auth/refresh`, {refreshToken});
@@ -165,6 +177,62 @@ export const bookAPI = {
             throw error;
         }
     },
+<<<<<<< HEAD
+
+    async addBook(bookData) {
+        try {
+            const response = await instance.post(`book/add`, bookData);
+            console.log(response.data);
+=======
+    async addBook(bookData) {
+        try {
+            const response = await instance.post(`book/add`, bookData);
+>>>>>>> 568e89630bf12287d43f974d34d8efa9cc00e50c
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+<<<<<<< HEAD
+
+    async editBookById(id, bookData) {
+        try {
+            const response = await instance.post(`book/id?id=${id}`, bookData);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async editBookByIsbn(isbn, bookData) {
+        try {
+            const response = await instance.post(`book/isbn?isbn=${isbn}`, bookData);
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async deleteBookById(id) {
+        try {
+            const response = await instance.delete(`book/delete/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async deleteBookByIsbn(isbn) {
+        try {
+            const response = await instance.delete(`book/delete/${isbn}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+=======
+>>>>>>> 568e89630bf12287d43f974d34d8efa9cc00e50c
 };
 export const profileAPI = {
     async getProfileByUsername(username) {
@@ -191,7 +259,6 @@ export const profileAPI = {
             throw error;
         }
     },
-
 
     async getProfileBooks(username) {
         try {
