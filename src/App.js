@@ -8,7 +8,6 @@ import ProfileEditDialog from "./components/ProfileEditDialog";
 import SearchResultsPage from "./components/SearchResultsPage";
 import BookPage from "./pages/bookPage";
 import CatalogPage from "./components/CatalogPage";
-import {bookAPI, postAPI, profileAPI} from "./api";
 import EditBook from "./components/editBook";
 import AddBook from "./components/addBook";
 

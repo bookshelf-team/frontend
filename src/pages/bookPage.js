@@ -41,9 +41,9 @@ const genreMappings = {
     GENRE_HUMOR: 'Гумор',
 };
 
-const getUkrainianGenreName = (englishGenreKey) => {
+/*const getUkrainianGenreName = (englishGenreKey) => {
     return genreMappings[englishGenreKey] || englishGenreKey;
-};
+};*/
 
 export default function BookPage() {
     const { bookIsbn } = useParams();
