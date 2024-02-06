@@ -16,21 +16,18 @@ export const addBooksReducer = (state = initialState, action) => {
         case ADD_BOOK_SUCCESS:
             return {
                 ...state,
-                books: [...state, action.payload],
+                books: [...state.books, action.payload],
                 loading: false,
                 errorMessage: null
             };
         case EDIT_BOOK_BY_ID_SUCCESS:
-            return {
-                ...state,
-                books: [...state, action.payload],
-                loading: false,
-                errorMessage: null
-            };
         case EDIT_BOOK_BY_ISBN_SUCCESS:
+            const updatedBooks = state.books.map(book =>
+                book.id === action.payload.id ? action.payload : book
+            );
             return {
                 ...state,
-                books: [...state, action.payload],
+                books: updatedBooks,
                 loading: false,
                 errorMessage: null
             };

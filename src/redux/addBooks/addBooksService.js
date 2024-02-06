@@ -10,8 +10,8 @@ import {
 export const addBook = (bookData) => async (dispatch) => {
     try {
         const response = await bookAPI.addBook(bookData);
-        dispatch(addBookSuccess(response.data));
-        console.log(response.data);
+        dispatch(addBookSuccess(response));
+        console.log(response);
     } catch (error) {
         console.error("Error during adding book: " + error);
         throw error;
