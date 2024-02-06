@@ -46,7 +46,7 @@ export default function SignIn() {
         event.preventDefault();
         try {
             await dispatch(signIn(emailOrUsername, password));
-            navigate('/editbook');
+            navigate('/');
         } catch (error) {
             console.log(error);
         }
