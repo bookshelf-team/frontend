@@ -8,30 +8,30 @@ import ProfileEditDialog from "./components/ProfileEditDialog";
 import SearchResultsPage from "./components/SearchResultsPage";
 import BookPage from "./pages/bookPage";
 import CatalogPage from "./components/CatalogPage";
-import {bookAPI} from "./api";
-import AddBook from "./pages/addBook";
-import EditBook from "./pages/editBook";
+import {bookAPI, postAPI, profileAPI} from "./api";
+import EditBook from "./components/editBook";
+import AddBook from "./components/addBook";
 
 function App() {
 
     return (
         <Router>
             <Routes>
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/pages/userprofile" element={<UserProfile />} />
-                <Route path="/" element={<Main />} index={true}/>
-                <Route path="/main" element={<Main />}/>
-                <Route path="/editprofile" element={<ProfileEditDialog />} />
-                <Route path="/searchresults" element={<SearchResultsPage />} />
-                <Route path="/book" element={<BookPage/>}/>
-                <Route path="/catalogpage" element={<CatalogPage />} />
-                <Route path="/addbook" element={<AddBook />} />
-                <Route path="/editbook" element={<EditBook />} />
+                <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/signin" element={<SignIn/>}/>
+                <Route path="/pages/userprofile" element={<UserProfile/>}/>
+                <Route path="/" element={<Main/>} index={true}/>
+                <Route path="/main" element={<Main/>}/>
+                <Route path="/editprofile" element={<ProfileEditDialog/>}/>
+                <Route path="/searchresults" element={<SearchResultsPage/>}/>
+                <Route path="/book/:bookIsbn" element={<BookPage/>}/>
+                <Route path="/catalogpage" element={<CatalogPage/>}/>
+                <Route path="/addbook" element={<AddBook/>}/>
+                <Route path="/editbook" element={<EditBook/>}/>
             </Routes>
         </Router>
     );
-} 
+}
 
 /*bookAPI.getBookById(1).then((book) => {
     console.log("Book by ID:", book);
@@ -73,14 +73,14 @@ const newPost = {
     "body": "Just a simple post body",
     "imageUrl": null
 };
-postAPI.addPost(newPost).then(response => {
+/*postAPI.addPost(newPost).then(response => {
     console.log(response);
     console.log('гуд');
 }).catch(error => {
     console.error("Error adding a new post:", error);
-});
+});*/
 
-const updatedPost = {
+/*const updatedPost = {
     "title": "Just a NEW Post",
     "body": "Just a NEW post body",
     "imageUrl": null
@@ -95,9 +95,9 @@ postAPI.getPostById(1).then(post => {
     console.log('Пост 1:', post);
 }).catch(error => {
     console.error("Error get post by ID:", error);
-});
+});*/
 
-const bookData = {
+/*const bookData = {
     "author": "John Doe",
     "title": "Just a Book",
     "description": "Just a simple description",
@@ -111,5 +111,4 @@ const bookData = {
 bookAPI.addBook(bookData).then((result) => {
     console.log("Add BOOK:", result);
 });*/
-
 export default App;
