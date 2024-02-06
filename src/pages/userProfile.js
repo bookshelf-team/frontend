@@ -6,14 +6,12 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Avatar, IconButton } from '@mui/material';
-import Button from '@mui/material/Button';
 import ProfileEditDialog from '../components/ProfileEditDialog';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useDispatch, useSelector} from "react-redux";
 import {getUsernameFromLocalStorage} from "../redux/auth-utils";
 import {getProfileByUsername} from "../redux/profile/profileService";
-import EditBook from '../components/editBook';
 import AddBook from '../components/addBook';
 import AddPost from '../components/addPost';
 import EditPost from '../components/editPost';
@@ -89,12 +87,9 @@ export default function UserProfile() {
                 </IconButton>
             </Box>
             <header className='profile-header'>
-                <Button variant="text" sx={{ color: "white", }}>Новий допис</Button>
-                <ProfileEditDialog></ProfileEditDialog>
-                <EditBook></EditBook>
                 <AddBook></AddBook>
                 <AddPost></AddPost>
-                <EditPost></EditPost>
+                <ProfileEditDialog></ProfileEditDialog>
             </header>
             <Box sx={{
                 width: '100%',
@@ -156,7 +151,7 @@ export default function UserProfile() {
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
-                        Item One
+                        <EditPost></EditPost>
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={1}>
                         Item Two
