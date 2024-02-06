@@ -113,7 +113,7 @@ export default function ProfileEditDialog() {
 
     return (
         <div>
-            <Button onClick={() => setOpen(true)} sx={{color: "white", marginRight: "40px"}}>Редагувати</Button>
+            <Button onClick={() => setOpen(true)} sx={{color: "white", marginRight: "40px"}}>Редагувати профіль</Button>
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Редагування профілю</DialogTitle>
