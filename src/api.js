@@ -177,23 +177,16 @@ export const bookAPI = {
             throw error;
         }
     },
-<<<<<<< HEAD
 
     async addBook(bookData) {
         try {
-            const response = await instance.post(`book/add`, bookData);
+            const response = await instance.post(`book/add`, bookData)
             console.log(response.data);
-=======
-    async addBook(bookData) {
-        try {
-            const response = await instance.post(`book/add`, bookData);
->>>>>>> 568e89630bf12287d43f974d34d8efa9cc00e50c
             return response.data;
         } catch (error) {
             throw error;
         }
     },
-<<<<<<< HEAD
 
     async editBookById(id, bookData) {
         try {
@@ -231,8 +224,6 @@ export const bookAPI = {
             throw error;
         }
     }
-=======
->>>>>>> 568e89630bf12287d43f974d34d8efa9cc00e50c
 };
 export const profileAPI = {
     async getProfileByUsername(username) {
