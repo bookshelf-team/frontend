@@ -3,8 +3,8 @@ import {postAPI} from "../../api";
 export const getAllPosts = async () => {
     try {
         const posts = await postAPI.getAllPosts();
-        console.log("Успішно отримано всі пости:", posts);
-        return posts;
+        console.log("Успішно отримано всі пости:", posts.data);
+        return posts.data;
     } catch (error) {
         console.error("Помилка при отриманні всіх постів:", error);
         throw error;
@@ -25,10 +25,10 @@ export const getPostById = async (id) => {
 export const addPost = async (postData) => {
     try {
         const response = await postAPI.addPost(postData);
-        console.log("Успішно додано пост:", response.data);
-        return response.data;
+        console.log(response);
+        return response;
     } catch (error) {
-        console.error("Помилка при додаванні посту:", error);
+        console.error(error);
         throw error;
     }
 };
@@ -43,6 +43,18 @@ export const updatePostById = async (id, postData) => {
         throw error;
     }
 };
+
+export const getAllPostsByUsername = async (username) => {
+    try {
+        const response = await postAPI.getAllPostsByUsername(username)
+        console.log("Успішно взяті пости за іменем:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Помилка при взятті списку постів користувача:", error);
+        throw error;
+    }
+};
+
 
 export const deletePostById = async (id) => {
     try {

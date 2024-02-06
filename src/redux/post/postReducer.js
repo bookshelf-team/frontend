@@ -23,6 +23,13 @@ const postReducer = (state = initialState, action) => {
                 loading: false,
                 errorMessage: null,
             };
+        case ActionTypes.GET_ALL_POSTS_BY_USERNAME_SUCCESS:
+            return {
+                ...state,
+                posts: action.payload,
+                loading: false,
+                errorMessage: null,
+            };
         case ActionTypes.ADD_POST_SUCCESS:
             return {
                 ...state,

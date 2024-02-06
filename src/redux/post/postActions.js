@@ -3,6 +3,7 @@ import * as postService from "./postService";
 export const ActionTypes = {
     GET_ALL_POSTS_SUCCESS: "GET_ALL_POSTS_SUCCESS",
     GET_POST_BY_ID_SUCCESS: "GET_POST_BY_ID_SUCCESS",
+    GET_ALL_POSTS_BY_USERNAME_SUCCESS: "GET_ALL_POSTS_BY_USERNAME_SUCCESS",
     ADD_POST_SUCCESS: "ADD_POST_SUCCESS",
     UPDATE_POST_SUCCESS: "UPDATE_POST_SUCCESS",
     DELETE_POST_SUCCESS: "DELETE_POST_SUCCESS",
@@ -30,6 +31,21 @@ export const getPostById = (id) => async (dispatch) => {
         dispatch({
             type: ActionTypes.GET_POST_BY_ID_SUCCESS,
             payload: post,
+        });
+    } catch (error) {
+        dispatch({
+            type: ActionTypes.API_ERROR,
+            payload: error.message,
+        });
+    }
+};
+
+export const getAllPostsByUsername = (username) => async (dispatch) => {
+    try {
+        const posts = await postService.getAllPostsByUsername(username);
+        dispatch({
+            type: ActionTypes.GET_ALL_POSTS_BY_USERNAME_SUCCESS,
+            payload: posts,
         });
     } catch (error) {
         dispatch({
