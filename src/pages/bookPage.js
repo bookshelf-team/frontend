@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { getBookByIsbn} from "../redux/getBooks/getBooksService";
 import {addBookToProfile} from "../redux/profile/profileService";
 import {getUsernameFromLocalStorage} from "../redux/auth-utils";
+import BookRecommendationsThree from "../components/BookRecomendationThree";
 
 const genreMappings = {
     GENRE_FANTASY: 'Фентезі',
@@ -44,19 +45,10 @@ const getUkrainianGenreName = (englishGenreKey) => {
     return genreMappings[englishGenreKey] || englishGenreKey;
 };
 
-const book = {
-    cover: 'https://static.yakaboo.ua/media/catalog/product/f/b/fbca87146bb849107d32a0ed9172f5d8.jpg',
-    title: 'Гіпотеза кохання',
-    genre: 'Романтика',
-    author: 'Алі Гейзелвуд',
-    description: 'Опис книги...'
-};
-
-const books = [book, book, book];
 export default function BookPage() {
     const { bookIsbn } = useParams();
     const dispatch = useDispatch();
-    const book = useSelector((state) => state.bookPage.currentBook);
+    const book = useSelector((state) => state.bookByIsbn.currentBook);
     const [loading, setLoading] = useState(true);
 
     const handleBookAdding = async () => {
@@ -101,100 +93,92 @@ export default function BookPage() {
         }
     };
 
-    useEffect(() => {
-        const fetchBook = async () => {
-            try {
-                await dispatch(getBookByIsbn(bookIsbn));
-                setLoading(false);
-            } catch (error) {
-                console.error("Помилка при завантаженні книги: " + error);
-            }
-        };
+    const fetchBooks = async () => {
+        try {
+            await dispatch(getBookByIsbn(bookIsbn));
+            setLoading(false);
+        } catch (error) {
+            console.error("Помилка при завантаженні книги: " + error);
+        }
+    };
 
-        fetchBook();
+    useEffect(() => {
+        fetchBooks();
     }, [bookIsbn, dispatch]);
 
     if (loading) {
         return <div>Loading...</div>;
     }
 
-    const displayedGenres = book.genres.map((genreObj) => getUkrainianGenreName(genreObj.name));
-    console.log("English Genre Keys:", book.genres.map(genre => genre.name));
-    console.log("Ukrainian Genres:", displayedGenres);
 
     return (
         <Box>
-            <AppBar />
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-                <Box sx={{ display: "flex", width: "90%", marginTop: "50px", alignItems: "flex-end" }}>
-                    <Box className="image">
-                        <CardMedia
-                            component="img"
-                            sx={{ width: 150, height: 250, display: 'block', marginRight: "30px" }}
-                            alt={`Обкладинка книги`}
-                            image={book.coverImageUrl}
-                        />
-                    </Box>
-                    <Box sx={{ color: "white" }}>
-                        <Breadcrumbs aria-label="breadcrumb" marginBottom="100px" sx={{ color: "white" }} >
-                            <Link underline="hover" color="white" href="/">
-                                Bookshelf
-                            </Link>
-                            <Link underline="none" color="white">
-                                Жанр
-                            </Link>
-                            <Typography color="white">{displayedGenres.join(', ')}</Typography>
-                        </Breadcrumbs>
-                        <Typography variant="body1" component="div" sx={{ marginTop: 1, fontSize: 20}}>
-                            {book.title}
-                        </Typography>
-                        <Typography variant="body2" sx={{ fontSize: 17}}>
-                            {book.author}
-                        </Typography>
-                        <Typography variant="body2" component="div" sx={{ opacity: "0.4", fontSize: 17 }}>
-                            {displayedGenres.join(', ')}
-                        </Typography>
-                        <Button variant="outlined" sx={{ marginTop: "15px", marginRight: "15px", color: "white" }}
-                                onClick={()=> handleBookRead()}>Читаю
-                            <ClassIcon sx={{ marginLeft: "10px" }} />
-                        </Button>
-                        <Button variant="outlined" sx={{ marginTop: "15px", color: "white" }}
-                                onClick={() => handleBookAdding()}>Додати на полицю
-                            <CollectionsBookmarkIcon sx={{ marginLeft: "10px" }} />
-                        </Button>
-                    </Box>
-                </Box>
-                <Box sx={{ display: "flex", flexDirection: "column", width: "90%" }} >
-                    <Box color="white">
-                        <Typography variant="h5" marginTop="50px">Опис</Typography>
-                        <Typography width="70%" marginTop="20px" >
-                            {book.description}
-                        </Typography>
-                    </Box>
-                    <Box color="white">
-                        <Typography variant="h5" marginTop="50px">Рекомендовані до читання</Typography>
-                        <Grid marginTop="20px" container spacing={0}>
-                            {books.map((book, index) => (
-                                <Grid item xs={4} sm={4} md={2} lg={1.5} key={index} sx={{ marginRight: 15 }}>
-                                    <CardMedia
-                                        component="img"
-                                        sx={{ width: 150, height: 220, display: 'block' }}
-                                        image={book.cover}
-                                        alt={`Обкладинка книги ${book.title}`}
-                                    />
-                                    <Typography variant="body1" component="div" sx={{ marginTop: 1 }}>
-                                        {book.title}
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ opacity: "0.4" }}>
-                                        {book.author}
-                                    </Typography>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Box>
-                </Box>
-                <Footer />
-            </Box>
+            {/* Зміни у відображенні книги */}
+            {loading ? (
+                <div>Loading...</div>
+            ) : (
+                <div>
+                    {book.map((singleBook, index) => (
+                        <Box key={index}>
+                            <AppBar />
+                            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+                                <Box sx={{ display: "flex", width: "90%", marginTop: "50px", alignItems: "flex-end" }}>
+                                    <Box className="image">
+                                        <CardMedia
+                                            component="img"
+                                            sx={{ width: 150, height: 250, display: 'block', marginRight: "30px" }}
+                                            alt={`Обкладинка книги`}
+                                            image={singleBook.coverImageUrl}
+                                        />
+                                    </Box>
+                                    <Box sx={{ color: "white" }}>
+                                        <Breadcrumbs aria-label="breadcrumb" marginBottom="100px" sx={{ color: "white" }} >
+                                            <Link underline="hover" color="white" href="/">
+                                                Bookshelf
+                                            </Link>
+                                            <Link underline="none" color="white">
+                                                Жанр
+                                            </Link>
+                                        </Breadcrumbs>
+                                        <Typography variant="body1" component="div" sx={{ marginTop: 1, fontSize: 20 }}>
+                                            {singleBook.title}
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ fontSize: 17 }}>
+                                            {singleBook.author}
+                                        </Typography>
+                                        <Typography variant="body2" component="div" sx={{ opacity: "0.4", fontSize: 17 }}>
+                                            {/* Додайте інші властивості книги */}
+                                        </Typography>
+                                        <Button variant="outlined" sx={{ marginTop: "15px", marginRight: "15px", color: "white" }}
+                                                onClick={() => handleBookRead()}>Читаю
+                                            <ClassIcon sx={{ marginLeft: "10px" }} />
+                                        </Button>
+                                        <Button variant="outlined" sx={{ marginTop: "15px", color: "white" }}
+                                                onClick={() => handleBookAdding()}>Додати на полицю
+                                            <CollectionsBookmarkIcon sx={{ marginLeft: "10px" }} />
+                                        </Button>
+                                    </Box>
+                                </Box>
+                                <Box sx={{ display: "flex", flexDirection: "column", width: "90%" }} >
+                                    <Box color="white">
+                                        <Typography variant="h5" marginTop="50px">Опис</Typography>
+                                        <Typography width="70%" marginTop="20px" >
+                                            {singleBook.description}
+                                        </Typography>
+                                    </Box>
+                                    <Box color="white">
+                                        <Typography variant="h5" marginTop="50px">Рекомендовані до читання</Typography>
+                                        <Grid marginTop="20px" container spacing={4}>
+                                            <BookRecommendationsThree></BookRecommendationsThree>
+                                        </Grid>
+                                    </Box>
+                                </Box>
+                                <Footer />
+                            </Box>
+                        </Box>
+                    ))}
+                </div>
+            )}
         </Box>
     );
 }
