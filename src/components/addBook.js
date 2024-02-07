@@ -18,8 +18,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 const defaultTheme = createTheme();
 
-const genresList = ["Fantasy", "Science Fiction", "Mystery", "Romance", "Thriller", "Horror", "Non-Fiction"];
-
 export default function AddBook() {
     const [open, setOpen] = useState(false);
     const [bookData, setBookData] = useState({
@@ -36,14 +34,51 @@ export default function AddBook() {
 
     const dispatch = useDispatch();
 
+    const genreTranslations = {
+        "FANTASY": "Фентезі",
+        "ADVENTURE": "Пригодницький",
+        "ROMANCE": "Романтика",
+        "CONTEMPORARY": "Сучасний",
+        "DYSTOPIAN": "Дистопія",
+        "MYSTERY": "Таємниця",
+        "HORROR": "Жахи",
+        "THRILLER": "Трилер",
+        "PARANORMAL": "Паранормальний",
+        "HISTORICAL_FICTION": "Історична художня література",
+        "SCIENCE_FICTION": "Наукова фантастика",
+        "CHILDREN": "Дитячий",
+        "MEMOIR": "Мемуари",
+        "COOKBOOK": "Кулінарна книга",
+        "ART": "Мистецтво",
+        "SELF_HELP": "Самодопомога",
+        "PERSONAL_DEVELOPMENT": "Особистісний розвиток",
+        "MOTIVATIONAL": "Мотиваційний",
+        "HEALTH": "Здоров'я",
+        "HISTORY": "Історія",
+        "TRAVEL": "Подорожі",
+        "GUIDE": "Путівник",
+        "RELATIONSHIPS": "Відносини",
+        "HUMOR": "Гумор"
+    };
+
+    const genresList = Object.values(genreTranslations);
+
     const handleClose = () => {
         setOpen(false);
     };
 
     const handleSubmit = async () => {
-        await dispatch(addBook(bookData));
+        const englishGenres = bookData.genres.map(genre => {
+            for (const [key, value] of Object.entries(genreTranslations)) {
+                if (value === genre) {
+                    return key;
+                }
+            }
+        });
+        await dispatch(addBook({...bookData, genres: englishGenres}));
         handleClose();
     };
+
 
     const handleInputChange = (event) => {
         const {name, value} = event.target;
