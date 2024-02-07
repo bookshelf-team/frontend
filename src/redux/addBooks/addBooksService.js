@@ -29,15 +29,17 @@ export const editBookById = (id, bookData) => async (dispatch) => {
 }
 
 export const editBookByIsbn = (isbn, bookData) => async (dispatch) => {
+    console.log(`Attempting to edit book with ISBN: ${isbn} and data: `, bookData);
     try {
         const response = await bookAPI.editBookByIsbn(isbn, bookData);
-        dispatch(editBookByIsbnSuccess(response.data));
-        console.log(response.data);
+        dispatch(editBookByIsbnSuccess(response));
+        console.log("Edit book response:", response);
     } catch (error) {
-        console.error("Error during editing book by isbn: " + error);
+        console.error("Error during editing book by isbn: ", error);
         throw error;
     }
 }
+
 
 export const deleteBookById = (id) => async (dispatch) => {
     try {
