@@ -1,4 +1,5 @@
 const initialState = {
+    books: [],
     currentBook: null,
     loading: false,
     error: null,
@@ -16,6 +17,7 @@ const bookByIsbnReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentBook: action.payload,
+                books: action.payload,
                 loading: false,
                 error: null,
             };
