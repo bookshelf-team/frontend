@@ -15,8 +15,12 @@ import {getProfileByUsername} from "../redux/profile/profileService";
 import AddBook from '../components/addBook';
 import AddPost from '../components/addPost';
 import EditPost from '../components/editPost';
+import PostCards from '../components/PostCard';
+import BookComponent from '../components/BookComponent';
+import PostForUserprofile from '../components/PostForUserprofile';
+import PostGrid from '../components/PostGrid';
 
-export default function UserProfile() {
+export default function UserProfile({posts}) {
     let navigate = useNavigate();
     const handleGoHome = () => {
         navigate('/');
@@ -151,13 +155,16 @@ export default function UserProfile() {
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
-                        <EditPost></EditPost>
+                      <EditPost/>
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={1}>
-                        Item Two
+                        <BookComponent/>
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={2}>
-                        Item Three
+                        <BookComponent/>
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={3}>
+                        <BookComponent/>
                     </CustomTabPanel>
                 </Box>
             </Box>

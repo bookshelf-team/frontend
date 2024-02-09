@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
     Box,
     CssBaseline,
+    Divider,
     IconButton,
     InputAdornment,
     ThemeProvider,
@@ -16,7 +17,8 @@ import Dialog from "@mui/material/Dialog";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllPosts, updatePostById } from "../redux/post/postActions";
+import { getAllPosts, updatePostById, deletePostById } from "../redux/post/postActions";
+import Icon from "@mui/material/Icon";
 import "./editPost.css";
 
 const defaultTheme = createTheme();
@@ -68,6 +70,14 @@ export default function EditPost() {
             } catch (error) {
                 console.error("Помилка при оновленні посту:", error);
             }
+
+            // try {
+            //     const deletePost = await dispatch(deletePostById(selectedPost.id, deletePostData));
+            //     console.log("Успішно оновлено пост:", deletePost);
+            //     setOpen(false);
+            // } catch (error) {
+            //     console.error("Помилка при оновленні посту:", error);
+            // }
         }
     };
 
@@ -75,10 +85,32 @@ export default function EditPost() {
         <div>
             <ul className="post-list">
                 {posts.map((post) => (
-                    <li key={post.id}>
-                        {post.title}{" "}
-                        <button className="edit-button" onClick={() => handleEdit(post)}>Редагувати допис</button>
-                    </li>
+                    // <li key={post.id}>
+                    //     {post.title}{" "}
+                    //     {post.body}{" "}
+                    //     <button className="edit-button" onClick={() => handleEdit(post)}>Редагувати допис</button>
+                    // </li>
+                    <Box sx={{display:"flex", flexDirection:"row", width:"90%",marginLeft:3, 
+                    alignItems:"flex-start", 
+                    justifyContent:"flex-start", 
+                    adding:"20px", border:"solid", 
+                    borderRadius:2, borderColor:"#1D1E23", 
+                    marginBottom:5,
+                    padding:5, }}>
+
+                        <Icon>{post.imageUrl}{" "}</Icon>
+
+                        <Box  sx={{ width:"100%", alignSelf:"flex-end", justifySelf:"flex-end"}} >
+                            <Typography sx={{color:"black",marginBottom:"10px"}}>{post.title}{" "}</Typography>
+                            <Divider orientation="horizontal" width="100%" color="black" />
+                            <Typography  sx={{color:"black", marginTop:"10px"}}> {post.body}{" "}
+                            </Typography>
+                            <Button variant="contained" sx={{marginTop:3}}  onClick={() => handleEdit(post)}>Редагувати допис</Button>
+                        </Box>
+                        
+            
+                        
+                    </Box>
                 ))}
             </ul>
 
